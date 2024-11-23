@@ -8,6 +8,10 @@
         "limits": "Classification[3:5]"
     },
     {
+        "type": "filters.assign",
+        "assignment": "Z[:]=1"
+    },
+    {
         "type": "writers.gdal",
         "filename": "../tmp/vegetation.tif",
         "dimension": "Z",
