@@ -1,3 +1,6 @@
+#conda activate myenv
+
+echo "pipeline" 
 pdal pipeline p.json
 
 echo "hillshading" 
