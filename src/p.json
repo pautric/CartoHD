@@ -1,0 +1,16 @@
+[
+    {
+        "type": "readers.las",
+        "filename": "/home/juju/Bureau/lidar_test/tiles/*.laz"
+    },
+   {
+    "type": "filters.ferry",
+    "dimensions": "Z=>elevation"
+  },
+  {
+    "type": "writers.gdal",
+    "filename": "../tmp/dtm.tif",
+    "resolution": 0.25,
+    "output_type": "max"
+  }
+]

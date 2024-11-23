@@ -24,7 +24,7 @@
         },
   {
     "type": "writers.gdal",
-    "filename": "pdal_out/dtm_2.tif",
+    "filename": "../tmp/dtm.tif",
     "resolution": 0.25,
     "output_type": "min"
   }
