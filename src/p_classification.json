@@ -1,0 +1,22 @@
+[
+    {
+        "type": "readers.las",
+        "filename": "/home/juju/Bureau/lidar_test/tiles/*.laz"
+    },
+    {
+        "limits": "Classification![7:7]",
+        "type": "filters.range",
+        "tag": "nonoise"
+    },
+    {
+        "type": "filters.assign",
+        "value": "Classification = 0"
+    },
+    {
+        "type": "filters.csf"
+    },
+    {
+        "type":"writers.las",
+        "filename":"../tmp/classified_csf.laz"
+    }
+]
