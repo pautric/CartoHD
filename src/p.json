@@ -9,8 +9,14 @@
   },
   {
     "type": "writers.gdal",
-    "filename": "../tmp/dtm.tif",
-    "resolution": 0.25,
+    "filename": "../tmp/dsm.tif",
+    "resolution": 0.2,
     "output_type": "max"
+  },
+  {
+    "type": "writers.gdal",
+    "filename": "../tmp/dtm.tif",
+    "resolution": 0.2,
+    "output_type": "min"
   }
 ]
