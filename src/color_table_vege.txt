@@ -1,2 +1,0 @@
-0 0 0 0 0  # Transparent background
-1 31 156 87 255  # Green for vegetation
