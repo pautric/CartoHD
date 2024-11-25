@@ -15,7 +15,7 @@
   {
     "type": "writers.gdal",
     "filename": "../tmp/dsm.tif",
-    "resolution": 0.2,
+    "resolution": 0.1,
     "output_type": "max"
   }
 ]
