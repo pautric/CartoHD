@@ -82,4 +82,5 @@ gdaldem slope dtm.tif slope.tif -s 1
 
 * color DEM - see example https://pdal.io/en/2.8.1/tutorial/iowa-entwine.html
 gdaldem color-relief iowa.tif dem-colors.txt iowa-color.png
+or do it with qgis
 
