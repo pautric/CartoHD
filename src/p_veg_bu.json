@@ -16,10 +16,8 @@
         "filename": "../tmp/vegetation.tif",
         "dimension": "Z",
         "output_type": "max",
-        "resolution": 0.1
+        "resolution": 0.2
     },
-
-
 
 
 
@@ -40,6 +38,6 @@
         "filename": "../tmp/building.tif",
         "dimension": "Z",
         "output_type": "max",
-        "resolution": 0.1
+        "resolution": 0.2
     }
 ]
