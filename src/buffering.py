@@ -13,9 +13,11 @@ def buffer_tiff(input_path, output_path, buffer_distance):
     """
     # Open the TIFF file
     with rasterio.open(input_path) as src:
-        data = src.read(1)  # Read the first band
+
+        # Read the first band
+        data = src.read(1)
         no_data_value = src.nodata
-        
+
         if no_data_value is None:
             raise ValueError("Input TIFF file does not specify a 'no_data' value.")
 
@@ -47,3 +49,6 @@ def buffer_tiff(input_path, output_path, buffer_distance):
             dst.write(buffered_data, 1)
 
     print(f"Buffered TIFF saved to: {output_path}")
+
+
+buffer_tiff("tmp/vegetation.tif", "../tmp/vegetation_buff.tif", 10)
