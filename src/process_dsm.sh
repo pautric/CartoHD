@@ -1,8 +1,5 @@
 #conda activate myenv
 
-echo "pipeline DSM" 
-pdal pipeline p_dsm.json
-
 echo "fill no data" 
 gdal_fillnodata.py -md 20 -of GTiff ../tmp/dsm_raw.tif ../tmp/dsm.tif
 
