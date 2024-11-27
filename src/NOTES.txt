@@ -1,8 +1,9 @@
 TODO:
-blurry whater ?
-more topo names ?
-fix vege artefact
+filter/smooth DSM
 relief and contours from LIDAR
+test ambient oclusion - only for buildings
+blurry water ?
+more topo names ?
 contour labels
 single process: remove pullautin, get shadow computation
 
