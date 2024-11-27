@@ -1,3 +1,13 @@
+TODO:
+blurry whater ?
+more topo names ?
+fix vege artefact
+relief and contours from LIDAR
+contour labels
+single process: remove pullautin, get shadow computation
+
+
+
 target scale: 1:1000
 
 https://github.com/rphlo/karttapullautin
