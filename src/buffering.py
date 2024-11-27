@@ -51,4 +51,4 @@ def buffer_tiff(input_path, output_path, buffer_distance):
     print(f"Buffered TIFF saved to: {output_path}")
 
 
-buffer_tiff("tmp/vegetation.tif", "../tmp/vegetation_buff.tif", 10)
+buffer_tiff("tmp/vegetation.tif", "tmp/vegetation_buff.tif", 10)
