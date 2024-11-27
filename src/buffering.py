@@ -114,7 +114,9 @@ def sequential_buffer_tiff(input_path, output_path, buffer_distances):
             dst.write(final_data, 1)
 
 
-for buf in [1,2,3,4]:
-    print(buf)
-    sequential_buffer_tiff("tmp/vegetation.tif", "tmp/vegetation_"+str(buf)+".tif", [-buf, buf])
+print("clean vegetation.tif")
+sequential_buffer_tiff("tmp/vegetation.tif", "tmp/vegetation_clean.tif", [-2, 2])
+
+print("clean building.tif")
+sequential_buffer_tiff("tmp/building.tif", "tmp/building_clean.tif", [3, -3])
 
