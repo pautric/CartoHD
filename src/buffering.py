@@ -2,33 +2,46 @@ import numpy as np
 import rasterio
 from scipy.ndimage import binary_dilation
 
+import numpy as np
+import rasterio
+from scipy.ndimage import binary_dilation, binary_erosion
+
 def buffer_tiff(input_path, output_path, buffer_distance):
     """
-    Buffers pixels with value 1 in a TIFF image.
+    Buffers pixels with value 1 in a TIFF image. 
+    Supports both positive (expansion) and negative (shrinkage) buffer distances.
 
     Parameters:
         input_path (str): Path to the input TIFF file.
         output_path (str): Path to save the output buffered TIFF file.
-        buffer_distance (int): Number of pixels to buffer around each pixel with value 1.
+        buffer_distance (int): Number of pixels to buffer.
+                               Positive values expand, negative values shrink.
     """
     # Open the TIFF file
     with rasterio.open(input_path) as src:
-
-        # Read the first band
-        data = src.read(1)
+        data = src.read(1)  # Read the first band
         no_data_value = src.nodata
-
+        
         if no_data_value is None:
             raise ValueError("Input TIFF file does not specify a 'no_data' value.")
 
         # Create a mask of pixels with value 1
         valid_data_mask = data == 1
 
-        # Generate a structuring element for dilation based on the buffer distance
-        structure = np.ones((2 * buffer_distance + 1, 2 * buffer_distance + 1))
+        # Generate a structuring element for the operation
+        abs_buffer_distance = abs(buffer_distance)
+        structure = np.ones((2 * abs_buffer_distance + 1, 2 * abs_buffer_distance + 1))
 
-        # Apply a binary dilation to buffer the pixels
-        buffered_mask = binary_dilation(valid_data_mask, structure=structure)
+        # Apply the appropriate operation
+        if buffer_distance > 0:
+            # Positive buffer (expansion)
+            buffered_mask = binary_dilation(valid_data_mask, structure=structure)
+        elif buffer_distance < 0:
+            # Negative buffer (shrinkage)
+            buffered_mask = binary_erosion(valid_data_mask, structure=structure)
+        else:
+            # No buffer, keep the original
+            buffered_mask = valid_data_mask
 
         # Create a new array, keeping 'no_data_value' in the background
         buffered_data = np.where(buffered_mask, 1, no_data_value)
@@ -48,7 +61,5 @@ def buffer_tiff(input_path, output_path, buffer_distance):
         ) as dst:
             dst.write(buffered_data, 1)
 
-    print(f"Buffered TIFF saved to: {output_path}")
+buffer_tiff("tmp/vegetation.tif", "tmp/vegetation_buff.tif", -1)
 
-
-buffer_tiff("tmp/vegetation.tif", "tmp/vegetation_buff.tif", 10)
