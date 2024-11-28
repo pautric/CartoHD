@@ -47,7 +47,7 @@ if process_vegetation:
 
     print("pipeline vegetation")
     run_command(["pdal", "pipeline", "src/p_vegetation.json"])
-    #TODO vectorise ?
+    #TODO vectorise ? To make blurry outline ?
 
     print("clean vegetation.tif")
     sequential_buffer_tiff("tmp/vegetation.tif", "tmp/vegetation_clean.tif", [-2, 2])
@@ -56,7 +56,7 @@ if process_building:
 
     print("pipeline building")
     run_command(["pdal", "pipeline", "src/p_building.json"])
-    #TODO vectorise ?
+    #TODO vectorise ? to make outline when styling
 
     print("clean building.tif")
     sequential_buffer_tiff("tmp/building.tif", "tmp/building_clean.tif", [3, -3])
