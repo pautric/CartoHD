@@ -10,7 +10,7 @@ outfolder = "../tmp/"
 pipeline = [
     {
         "type": "readers.las",
-        "filename": 
+        "filename": tiles
     },
     {
         "limits": "Classification![7:7]",
@@ -23,7 +23,7 @@ pipeline = [
     },
     {
         "type": "writers.gdal",
-        "filename:" + outfolder + "dsm_raw.tif",
+        "filename": outfolder + "dsm_raw.tif",
         "resolution": 0.2,
         "output_type": "max"
     }
