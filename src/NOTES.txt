@@ -1,15 +1,3 @@
-TODO:
-filter/smooth DSM
-relief and contours from LIDAR
-test ambient oclusion - only for buildings
-blurry water ?
-more topo names ?
-contour labels
-single process: remove pullautin, get shadow computation
-
-
-
-target scale: 1:1000
 
 https://github.com/rphlo/karttapullautin
 lasground

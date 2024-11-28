@@ -1,8 +1,18 @@
-import subprocess
+from lib import run_command, sequential_buffer_tiff
 
-from buffering import run_command, sequential_buffer_tiff
+'''
+target scale: 1:1000
+
+test ambient oclusion - only for buildings
+blurry water ?
+more topo names ?
+contour labels
+test https://www.shadedrelief.com/texture_shading/
+
+'''
 
 process_dsm = False
+process_dtm = False
 process_vegetation = True
 process_building = False
 
@@ -11,6 +21,9 @@ if process_dsm:
 
     print("pipeline DSM")
     run_command(["pdal", "pipeline", "src/p_dsm.json"])
+
+    #TODO: remove outliers
+    #TODO: smooth ?
 
     print("fill no data")
     #TODO: should not be linear
@@ -23,6 +36,12 @@ if process_dsm:
     run_command("gdaldem slope ../tmp/dsm.tif ../tmp/slope.tif -s 1")
 
     #TODO: make shadows
+
+if process_dtm:
+    #make contours
+    #TODO use pullauta ?
+    pass
+
 
 if process_vegetation:
 
