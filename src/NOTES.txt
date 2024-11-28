@@ -43,6 +43,20 @@ pdal info input.laz
 13: Bridges
 17: Bridge Decks
 
+
+
+
+* filter outliers
+  {
+    "type": "filters.outlier",
+    "method": "radius",
+    "radius": 1.0,
+    "min_k": 4
+  },
+
+
+
+
 * color point cloud
     {
         "type":"filters.colorization",
