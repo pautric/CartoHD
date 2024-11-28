@@ -1,0 +1,21 @@
+[
+    {
+        "type": "readers.las",
+        "filename": "/home/juju/Bureau/lidar_test/tiles/*.laz"
+    },
+    {
+        "type": "filters.range",
+        "limits": "Classification[6:6]"
+    },
+    {
+        "type": "filters.assign",
+        "assignment": "Z[:]=1"
+    },
+    {
+        "type": "writers.gdal",
+        "filename": "../tmp/building.tif",
+        "dimension": "Z",
+        "output_type": "max",
+        "resolution": 0.2
+    }
+]

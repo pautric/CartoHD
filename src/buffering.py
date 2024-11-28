@@ -1,3 +1,4 @@
+import subprocess
 import numpy as np
 import rasterio
 from scipy.ndimage import binary_dilation
@@ -5,6 +6,15 @@ from scipy.ndimage import binary_dilation
 import numpy as np
 import rasterio
 from scipy.ndimage import binary_dilation, binary_erosion
+
+
+def run_command(command):
+    result = subprocess.run(command, capture_output=True, text=True)
+    print(result.stdout)
+    if result.stderr:
+        print("Error:", result.stderr)
+
+
 
 def buffer_tiff(input_path, output_path, buffer_distance):
     """
@@ -113,10 +123,4 @@ def sequential_buffer_tiff(input_path, output_path, buffer_distances):
         ) as dst:
             dst.write(final_data, 1)
 
-
-print("clean vegetation.tif")
-sequential_buffer_tiff("tmp/vegetation.tif", "tmp/vegetation_clean.tif", [-2, 2])
-
-print("clean building.tif")
-sequential_buffer_tiff("tmp/building.tif", "tmp/building_clean.tif", [3, -3])
 
