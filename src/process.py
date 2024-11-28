@@ -13,8 +13,8 @@ test https://www.shadedrelief.com/texture_shading/
 
 process_dsm = False
 process_dtm = False
-process_vegetation = True
-process_building = False
+process_vegetation = False
+process_building = True
 
 
 if process_dsm:
@@ -56,9 +56,10 @@ if process_building:
 
     print("pipeline building")
     run_command(["pdal", "pipeline", "src/p_building.json"])
-    #TODO vectorise ? to make outline when styling
 
     print("clean building.tif")
     sequential_buffer_tiff("tmp/building.tif", "tmp/building_clean.tif", [3, -3])
 
+    print("vectorise")
+    run_command('gdal_polygonize.py tmp/building_clean.tif -f "GPKG" tmp/building.gpkg')
 
