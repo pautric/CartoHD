@@ -17,27 +17,28 @@ process_vegetation = True
 process_building = True
 with_pdal_pipeline = True
 
+
+# ensure pdal command is available through conda install
+if with_pdal_pipeline: run_command(["conda", "activate", "pdal"])
+
 if process_dsm:
 
     if with_pdal_pipeline:
         print("pipeline DSM")
-        #run_command(["conda", "activate", "pdal"])
         run_command(["pdal", "pipeline", "src/p_dsm.json"])
-
-    #run_command(["conda", "deactivate"])
 
     #TODO: remove outliers
     #TODO: smooth ?
 
     print("fill no data")
     #TODO: should not be linear
-    run_command(["gdal_fillnodata.py", "-md", "20", "-of", "GTiff", "../tmp/dsm_raw.tif", "../tmp/dsm.tif"])
+    run_command(["gdal_fillnodata.py", "-md", "20", "-of", "GTiff", "tmp/dsm_raw.tif", "tmp/dsm.tif"])
 
     print("hillshading")
-    run_command(["gdaldem hillshade", "../tmp/dsm.tif", "../tmp/hillshade.tif", "-z", "1", "-s", "1", "-az", "315", "-alt", "45"])
+    run_command(["gdaldem hillshade", "tmp/dsm.tif", "tmp/hillshade.tif", "-z", "1", "-s", "1", "-az", "315", "-alt", "45"])
 
     print("slope")
-    run_command(["gdaldem slope", "../tmp/dsm.tif", "../tmp/slope.tif", "-s", "1"])
+    run_command(["gdaldem slope", "tmp/dsm.tif", "tmp/slope.tif", "-s", "1"])
 
     #TODO: make shadows
 
@@ -51,10 +52,7 @@ if process_vegetation:
 
     if with_pdal_pipeline:
         print("pipeline vegetation")
-        #run_command(["conda", "activate", "pdal"])
         run_command(["pdal", "pipeline", "src/p_vegetation.json"])
-
-    #run_command(["conda", "deactivate"])
 
     #TODO vectorise ? To make blurry outline ?
 
@@ -65,10 +63,7 @@ if process_building:
 
     if with_pdal_pipeline:
         print("pipeline building")
-        #run_command(["conda", "activate", "pdal"])
         run_command(["pdal", "pipeline", "src/p_building.json"])
-
-    #run_command(["conda", "deactivate"])
 
     print("clean building.tif")
     sequential_buffer_tiff("tmp/building.tif", "tmp/building_clean.tif", [3, -3])
