@@ -63,3 +63,4 @@ if process_building:
     print("vectorise")
     run_command('gdal_polygonize.py tmp/building_clean.tif -f "GPKG" tmp/building.gpkg')
 
+#ogr2ogr -f "GPKG" output_simplified.gpkg output.gpkg -simplify <tolerance>
