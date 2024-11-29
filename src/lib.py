@@ -10,7 +10,7 @@ from scipy.ndimage import binary_dilation, binary_erosion
 
 def run_command(command):
     result = subprocess.run(command, capture_output=True, text=True)
-    print(result.stdout)
+    if result.stdout: print(result.stdout)
     if result.stderr:
         print("Error:", result.stderr)
 
