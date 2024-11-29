@@ -35,10 +35,10 @@ if process_dsm:
     run_command(["gdal_fillnodata.py", "-md", "20", "-of", "GTiff", "tmp/dsm_raw.tif", "tmp/dsm.tif"])
 
     print("hillshading")
-    run_command(["gdaldem hillshade", "tmp/dsm.tif", "tmp/hillshade.tif", "-z", "1", "-s", "1", "-az", "315", "-alt", "45"])
+    run_command(["gdaldem", "hillshade", "tmp/dsm.tif", "tmp/hillshade.tif", "-z", "1", "-s", "1", "-az", "315", "-alt", "45"])
 
     print("slope")
-    run_command(["gdaldem slope", "tmp/dsm.tif", "tmp/slope.tif", "-s", "1"])
+    run_command(["gdaldem", "slope", "tmp/dsm.tif", "tmp/slope.tif", "-s", "1"])
 
     #TODO: make shadows
 
