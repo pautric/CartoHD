@@ -1,8 +1,8 @@
 import subprocess
 import numpy as np
 import rasterio
+from rasterio.enums import Resampling
 from scipy.ndimage import binary_dilation, gaussian_filter, binary_erosion
-
 
 def run_command(command):
     result = subprocess.run(command, capture_output=True, text=True)
@@ -77,7 +77,6 @@ def sequential_buffer_tiff(input_path, output_path, buffer_distances):
         output_path (str): Path to save the final buffered TIFF file.
         buffer_distances (list of int): List of buffer distances - in pixel number !!! (positive for expansion, negative for shrinking).
     """
-    # Open the TIFF file
     with rasterio.open(input_path) as src:
         data = src.read(1)  # Read the first band
         no_data_value = src.nodata
@@ -120,3 +119,33 @@ def sequential_buffer_tiff(input_path, output_path, buffer_distances):
             dst.write(final_data, 1)
 
 
+
+def smooth(input_file, output_file, sigma):
+    """
+    Apply kernel smoothing to a TIFF
+
+    Parameters:
+    - input_file: str, path to the input DTM GeoTIFF file.
+    - output_file: str, path to save the smoothed DTM GeoTIFF file.
+    - sigma: float, standard deviation for Gaussian kernel.
+
+    Returns:
+    - None
+    """
+
+    with rasterio.open(input_file) as src:
+        dtm = src.read(1, masked=True)
+        profile = src.profile
+
+        # Apply Gaussian smoothing
+        smoothed_dtm = gaussian_filter(dtm.filled(np.nan), sigma=sigma)
+
+        # Replace masked nodata regions with original nodata value
+        smoothed_dtm = np.where(dtm.mask, profile['nodata'], smoothed_dtm)
+
+    # Update the profile for output
+    profile.update(dtype=rasterio.float32, count=1, compress='lzw')
+
+    # Save the smoothed DTM
+    with rasterio.open(output_file, 'w', **profile) as dst:
+        dst.write(smoothed_dtm.astype(rasterio.float32), 1)
