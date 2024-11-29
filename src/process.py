@@ -13,14 +13,15 @@ test https://www.shadedrelief.com/texture_shading/
 
 process_dsm = False
 process_dtm = False
-process_vegetation = True
+process_vegetation = False
 process_building = True
-
+with_pdal_pipeline = False
 
 if process_dsm:
 
-    print("pipeline DSM")
-    run_command(["pdal", "pipeline", "src/p_dsm.json"])
+    if with_pdal_pipeline:
+        print("pipeline DSM")
+        run_command(["pdal", "pipeline", "src/p_dsm.json"])
 
     #TODO: remove outliers
     #TODO: smooth ?
@@ -45,8 +46,10 @@ if process_dtm:
 
 if process_vegetation:
 
-    print("pipeline vegetation")
-    run_command(["pdal", "pipeline", "src/p_vegetation.json"])
+    if with_pdal_pipeline:
+        print("pipeline vegetation")
+        run_command(["pdal", "pipeline", "src/p_vegetation.json"])
+
     #TODO vectorise ? To make blurry outline ?
 
     print("clean vegetation.tif")
@@ -54,8 +57,9 @@ if process_vegetation:
 
 if process_building:
 
-    print("pipeline building")
-    run_command(["pdal", "pipeline", "src/p_building.json"])
+    if with_pdal_pipeline:
+        print("pipeline building")
+        run_command(["pdal", "pipeline", "src/p_building.json"])
 
     print("clean building.tif")
     sequential_buffer_tiff("tmp/building.tif", "tmp/building_clean.tif", [3, -3])
@@ -63,4 +67,5 @@ if process_building:
     print("vectorise")
     run_command('gdal_polygonize.py tmp/building_clean.tif -f "GPKG" tmp/building.gpkg')
 
-#ogr2ogr -f "GPKG" output_simplified.gpkg output.gpkg -simplify <tolerance>
+    print("simplify")
+    run_command('ogr2ogr -f "GPKG" tmp/building_simplified.gpkg tmp/building.gpkg -simplify 1')
