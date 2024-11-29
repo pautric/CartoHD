@@ -13,7 +13,7 @@
     },
     {
         "type": "writers.gdal",
-        "filename": "../tmp/vegetation.tif",
+        "filename": "tmp/vegetation.tif",
         "dimension": "Z",
         "output_type": "max",
         "resolution": 0.2

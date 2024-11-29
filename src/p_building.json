@@ -13,7 +13,7 @@
     },
     {
         "type": "writers.gdal",
-        "filename": "../tmp/building.tif",
+        "filename": "tmp/building.tif",
         "dimension": "Z",
         "output_type": "max",
         "resolution": 0.2
