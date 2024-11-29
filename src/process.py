@@ -1,4 +1,4 @@
-from lib import run_command, sequential_buffer_tiff
+from lib import run_command, sequential_buffer_tiff, smooth
 
 '''
 target scale: 1:1000
@@ -53,11 +53,12 @@ if process_dtm:
     #TODO: should not be linear
     #run_command(["gdal_fillnodata.py", "-md", "20", "-of", "GTiff", "tmp/dtm_raw.tif", "tmp/dtm.tif"])
 
-    #print("smooth dtm")
+    print("smooth dtm")
     #run_command(["gdal_filter", "-of", "GTiff", "-kernel", "smooth", "5x5", "-co", "COMPRESS=LZW", "tmp/dtm.tif", "tmp/dtm_smoothed.tif"])
+    smooth("tmp/dtm.tif", "tmp/dtm_smoothed.tif", 10)
 
-    print("contour dtm")
-    run_command(["gdal_contour", "-a", "elevation", "-i", "1", "tmp/dtm.tif", "-f", "GPKG", "tmp/contours.gpkg"])
+    #print("contour dtm")
+    #run_command(["gdal_contour", "-a", "elevation", "-i", "1", "tmp/dtm.tif", "-f", "GPKG", "tmp/contours.gpkg"])
 
 
 if process_vegetation:
