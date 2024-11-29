@@ -11,15 +11,15 @@ test https://www.shadedrelief.com/texture_shading/
 
 '''
 
-process_dsm = False
+process_dsm = True
 process_dtm = True
-process_vegetation = False
-process_building = False
-with_pdal_pipeline = False
+process_vegetation = True
+process_building = True
+with_pdal_pipeline = True
 
 
 # ensure pdal command is available through conda install
-if with_pdal_pipeline: run_command(["conda", "activate", "pdal"])
+#if with_pdal_pipeline: run_command(["conda", "activate", "pdal"])
 
 if process_dsm:
 
@@ -58,7 +58,7 @@ if process_dtm:
     run_command(["gdal_contour", "-a", "elevation", "-i", "1", "tmp/dtm_smoothed.tif", "-f", "GPKG", "tmp/contours.gpkg"])
 
     print("set contours type")
-    contour_type_field("tmp/contours.gpkg")
+    contour_type_field("tmp/contours.gpkg", "contour")
 
 
 if process_vegetation:

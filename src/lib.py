@@ -2,7 +2,10 @@ import subprocess
 import numpy as np
 import rasterio
 import geopandas as gpd
-from scipy.ndimage import binary_dilation, gaussian_filter, binary_erosion
+from scipy.ndimage import binary_dilation, gaussian_filter, binary_erosion, convolve
+
+
+
 
 def run_command(command):
     result = subprocess.run(command, capture_output=True, text=True)
@@ -151,27 +154,164 @@ def smooth(input_file, output_file, sigma):
         dst.write(smoothed_dtm.astype(rasterio.float32), 1)
 
 
-def contour_type_field(input_file, output_file=None):
-    """
-    Adds a new field 'type' to the GeoPackage file based on the 'elevation' field.
-    - 'index' if the elevation is a multiple of 5.
-    - 'normal' otherwise.
+def contour_type_field(input_file, layer_name, output_file=None):
 
-    Parameters:
-        input_file (str): Path to the input GeoPackage file.
-        layer_name (str): Name of the layer in the GeoPackage file.
-        output_file (str, optional): Path to save the updated GeoPackage file. 
-                                     Defaults to overwriting the input file.
-
-    Returns:
-        None
-    """
-    gdf = gpd.read_file(input_file)
-
-    if 'elevation' not in gdf.columns:
-        raise ValueError("'elevation' field not found in the layer.")
-
+    gdf = gpd.read_file(input_file, layer=layer_name)
     gdf['type'] = gdf['elevation'].apply(lambda x: 'index' if x % 5 == 0 else 'normal')
-
     if output_file is None: output_file = input_file
     gdf.to_file(output_file, layer=layer_name, driver="GPKG")
+
+
+
+
+
+
+
+
+def calculate_shadow(input_tiff, output_tiff, azimuth = 315, elevation_angle = 30):
+    """
+    Calculate the shadow map for a given DSM based on solar azimuth and elevation angle.
+
+    Parameters:
+        input_tiff: str, path to the input DSM file (TIFF).
+        output_tiff: str, path to the output shadow map file (TIFF).
+        azimuth: float, solar azimuth angle in degrees.
+        elevation_angle: float, solar elevation angle in degrees.
+    """
+    # Load DSM data
+    with rasterio.open(input_tiff) as dataset:
+        dsm = dataset.read(1)
+        resolution = dataset.res[0]
+        transform = dataset.transform
+
+    rows, cols = dsm.shape
+    shadow_map = np.ones_like(dsm, dtype=np.float32)  # Start with all pixels sunlit
+
+    # angles to radians
+    azimuth_rad = np.radians(azimuth)
+    elevation_rad = np.radians(elevation_angle)
+
+    # sun direction components
+    dx = np.sin(azimuth_rad)
+    dy = np.cos(azimuth_rad)
+    dz = np.tan(elevation_rad)
+
+    # check for shadow for each pixel
+    for i in range(rows):
+        for j in range(cols):
+            x, y, z = j, i, dsm[i, j]
+            shadow = False
+
+            # ray in sun direction
+            while 0 <= x < cols and 0 <= y < rows:
+                x += dx
+                y += dy
+                z += dz * resolution  # elevation increases along the ray
+
+                # nearest pixel
+                x_idx, y_idx = int(round(x)), int(round(y))
+                if 0 <= x_idx < cols and 0 <= y_idx < rows:
+                    if dsm[y_idx, x_idx] > z:  # shadow detected
+                        shadow = True
+                        break
+
+            # mark as shadowed
+            if shadow: shadow_map[i, j] = 0
+
+    # save
+    with rasterio.open(output_tiff, 'w', driver='GTiff', count=1, dtype='float32',
+                       width=cols, height=rows, crs=dataset.crs, transform=transform) as out_dataset:
+        out_dataset.write(shadow_map, 1)
+
+
+
+
+
+
+
+
+
+
+
+
+
+def calculate_shadowXXX(input_tiff, output_tiff, direction = 315, sun_angle = 30, smooth=False):
+    """
+    Simulate natural shadow over a raster DEM (Digital Elevation Model).
+    
+    Parameters:
+        input_tiff (str): Path to the input DEM TIFF file.
+        output_tiff (str): Path to save the output shadow map (TIFF file).
+        direction (float): Sun direction (azimuth) in degrees (0 to 360°).
+        sun_angle (float): Sun angle (elevation angle) in degrees (0 to 90°).
+        smooth (bool): Whether to apply a smoothing filter to the output (default: False).
+    """
+    # Open the input DEM raster file using rasterio
+    with rasterio.open(input_tiff) as src:
+        dem = src.read(1)  # Read the DEM as a 2D array (first band)
+        transform = src.transform  # Affine transform (georeferencing)
+        nodata_value = src.nodata  # NoData value (if present)
+
+        if nodata_value is None:
+            nodata_value = -9999  # Set a default NoData value if not set in the original DEM
+
+        # Mask out NoData values
+        dem[dem == nodata_value] = np.nan
+
+    # Calculate the sun direction components (dx, dy, dz)
+    direction_rad = np.radians(direction)
+    sun_angle_rad = np.radians(sun_angle)
+    dx = np.sin(direction_rad)  # Horizontal component
+    dy = np.cos(direction_rad)  # Horizontal component
+    dz = np.tan(sun_angle_rad)  # Vertical component
+
+    # Get the shape of the DEM (rows, cols)
+    rows, cols = dem.shape
+
+    # Create an empty array to store shadow depth values
+    shadow_map = np.ones_like(dem) * np.nan  # Initially set all to NaN
+
+    # Calculate shadow depth for each pixel based on the sun's position
+    for row in range(rows):
+        for col in range(cols):
+            if np.isnan(dem[row, col]):
+                continue  # Skip NoData values
+            
+            # Determine the shadow distance for each pixel
+            shadow_depth = 0
+            x, y = col, row
+            while True:
+                x += dx
+                y -= dy
+                shadow_depth += dz
+
+                # Check bounds
+                if x < 0 or x >= cols or y < 0 or y >= rows:
+                    break
+
+                if np.isnan(dem[int(y), int(x)]):
+                    break  # Stop if the ray leaves the DEM or hits NoData
+                
+                # Check if the surface blocks the shadow
+                if dem[int(y), int(x)] > dem[row, col] + shadow_depth:
+                    shadow_map[row, col] = shadow_depth
+                    break
+    
+    # Apply smoothing filter if requested
+    if smooth:
+        kernel = np.ones((3, 3)) / 9  # 3x3 averaging kernel
+        shadow_map = convolve(shadow_map, kernel, mode='nearest')
+
+    # Write the shadow map to the output TIFF file using rasterio
+    with rasterio.open(output_tiff, 'w', driver='GTiff',
+                       height=rows, width=cols,
+                       count=1, dtype='float32',
+                       crs=src.crs, transform=transform) as dst:
+        dst.write(shadow_map, 1)
+        dst.set_nodata(nodata_value)
+
+
+
+
+#calculate_shadowXXX("tmp/dsm.tif", "tmp/ZZZ_shadow.tif")
+
