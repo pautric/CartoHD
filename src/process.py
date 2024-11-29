@@ -1,4 +1,4 @@
-from lib import run_command, sequential_buffer_tiff, smooth
+from lib import run_command, sequential_buffer_tiff, smooth, contour_type_field
 
 '''
 target scale: 1:1000
@@ -56,6 +56,9 @@ if process_dtm:
 
     print("make contours")
     run_command(["gdal_contour", "-a", "elevation", "-i", "1", "tmp/dtm_smoothed.tif", "-f", "GPKG", "tmp/contours.gpkg"])
+
+    print("set contours type")
+    contour_type_field("tmp/contours.gpkg")
 
 
 if process_vegetation:

@@ -1,7 +1,7 @@
 import subprocess
 import numpy as np
 import rasterio
-from rasterio.enums import Resampling
+import geopandas as gpd
 from scipy.ndimage import binary_dilation, gaussian_filter, binary_erosion
 
 def run_command(command):
@@ -149,3 +149,29 @@ def smooth(input_file, output_file, sigma):
     # Save the smoothed DTM
     with rasterio.open(output_file, 'w', **profile) as dst:
         dst.write(smoothed_dtm.astype(rasterio.float32), 1)
+
+
+def contour_type_field(input_file, output_file=None):
+    """
+    Adds a new field 'type' to the GeoPackage file based on the 'elevation' field.
+    - 'index' if the elevation is a multiple of 5.
+    - 'normal' otherwise.
+
+    Parameters:
+        input_file (str): Path to the input GeoPackage file.
+        layer_name (str): Name of the layer in the GeoPackage file.
+        output_file (str, optional): Path to save the updated GeoPackage file. 
+                                     Defaults to overwriting the input file.
+
+    Returns:
+        None
+    """
+    gdf = gpd.read_file(input_file)
+
+    if 'elevation' not in gdf.columns:
+        raise ValueError("'elevation' field not found in the layer.")
+
+    gdf['type'] = gdf['elevation'].apply(lambda x: 'index' if x % 5 == 0 else 'normal')
+
+    if output_file is None: output_file = input_file
+    gdf.to_file(output_file, layer=layer_name, driver="GPKG")
