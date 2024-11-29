@@ -1,11 +1,7 @@
 import subprocess
 import numpy as np
 import rasterio
-from scipy.ndimage import binary_dilation
-
-import numpy as np
-import rasterio
-from scipy.ndimage import binary_dilation, binary_erosion
+from scipy.ndimage import binary_dilation, gaussian_filter, binary_erosion
 
 
 def run_command(command):
