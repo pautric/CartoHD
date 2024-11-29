@@ -11,10 +11,10 @@ test https://www.shadedrelief.com/texture_shading/
 
 '''
 
-process_dsm = True
+process_dsm = False
 process_dtm = True
-process_vegetation = True
-process_building = True
+process_vegetation = False
+process_building = False
 with_pdal_pipeline = True
 
 
@@ -30,22 +30,34 @@ if process_dsm:
     #TODO: remove outliers
     #TODO: smooth ?
 
-    print("fill no data")
+    print("fill dsm no data")
     #TODO: should not be linear
     run_command(["gdal_fillnodata.py", "-md", "20", "-of", "GTiff", "tmp/dsm_raw.tif", "tmp/dsm.tif"])
 
-    print("hillshading")
+    print("dsm hillshading")
     run_command(["gdaldem", "hillshade", "tmp/dsm.tif", "tmp/hillshade.tif", "-z", "1", "-s", "1", "-az", "315", "-alt", "45"])
 
-    print("slope")
+    print("dsm slope")
     run_command(["gdaldem", "slope", "tmp/dsm.tif", "tmp/slope.tif", "-s", "1"])
 
     #TODO: make shadows
 
 if process_dtm:
-    #make contours
-    #TODO use pullauta ?
-    pass
+
+    if with_pdal_pipeline:
+        print("pipeline DTM")
+        run_command(["pdal", "pipeline", "src/p_dtm.json"])
+
+
+    print("fill dtm no data")
+    #TODO: should not be linear
+    run_command(["gdal_fillnodata.py", "-md", "20", "-of", "GTiff", "tmp/dtm_raw.tif", "tmp/dtm.tif"])
+
+    print("smooth dtm")
+    run_command(["gdal_filter", "-of", "GTiff", "-kernel", "smooth", "5x5", "-co", "COMPRESS=LZW", "tmp/dtm.tif", "tmp/dtm_smoothed.tif"])
+
+    print("contour dtm")
+    run_command(["gdal_contour", "-a", "elevation", "-i", "5", "tmp/dtm_smoothed.tif", "-f", "GPKG", "tmp/contours.gpkg"])
 
 
 if process_vegetation:
