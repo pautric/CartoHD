@@ -48,17 +48,14 @@ if process_dtm:
         print("pipeline DTM")
         run_command(["pdal", "pipeline", "src/p_dtm.json"])
 
-
-    #print("fill dtm no data")
-    #TODO: should not be linear
-    #run_command(["gdal_fillnodata.py", "-md", "20", "-of", "GTiff", "tmp/dtm_raw.tif", "tmp/dtm.tif"])
+    print("fill dtm no data")
+    run_command(["gdal_fillnodata.py", "-md", "50", "-of", "GTiff", "tmp/dtm_raw.tif", "tmp/dtm.tif"])
 
     print("smooth dtm")
-    #run_command(["gdal_filter", "-of", "GTiff", "-kernel", "smooth", "5x5", "-co", "COMPRESS=LZW", "tmp/dtm.tif", "tmp/dtm_smoothed.tif"])
-    smooth("tmp/dtm.tif", "tmp/dtm_smoothed.tif", 10)
+    smooth("tmp/dtm.tif", "tmp/dtm_smoothed.tif", 6)
 
-    #print("contour dtm")
-    #run_command(["gdal_contour", "-a", "elevation", "-i", "1", "tmp/dtm.tif", "-f", "GPKG", "tmp/contours.gpkg"])
+    print("make contours")
+    run_command(["gdal_contour", "-a", "elevation", "-i", "1", "tmp/dtm_smoothed.tif", "-f", "GPKG", "tmp/contours.gpkg"])
 
 
 if process_vegetation:
