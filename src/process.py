@@ -15,7 +15,7 @@ process_dsm = False
 process_dtm = True
 process_vegetation = False
 process_building = False
-with_pdal_pipeline = True
+with_pdal_pipeline = False
 
 
 # ensure pdal command is available through conda install
@@ -53,8 +53,8 @@ if process_dtm:
     #TODO: should not be linear
     run_command(["gdal_fillnodata.py", "-md", "20", "-of", "GTiff", "tmp/dtm_raw.tif", "tmp/dtm.tif"])
 
-    print("smooth dtm")
-    run_command(["gdal_filter", "-of", "GTiff", "-kernel", "smooth", "5x5", "-co", "COMPRESS=LZW", "tmp/dtm.tif", "tmp/dtm_smoothed.tif"])
+    #print("smooth dtm")
+    #run_command(["gdal_filter", "-of", "GTiff", "-kernel", "smooth", "5x5", "-co", "COMPRESS=LZW", "tmp/dtm.tif", "tmp/dtm_smoothed.tif"])
 
     print("contour dtm")
     run_command(["gdal_contour", "-a", "elevation", "-i", "5", "tmp/dtm_smoothed.tif", "-f", "GPKG", "tmp/contours.gpkg"])
