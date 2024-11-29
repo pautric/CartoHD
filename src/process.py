@@ -21,7 +21,10 @@ if process_dsm:
 
     if with_pdal_pipeline:
         print("pipeline DSM")
+        run_command(["conda", "activate", "pdal"])
         run_command(["pdal", "pipeline", "src/p_dsm.json"])
+
+    run_command(["conda", "deactivate"])
 
     #TODO: remove outliers
     #TODO: smooth ?
@@ -48,7 +51,10 @@ if process_vegetation:
 
     if with_pdal_pipeline:
         print("pipeline vegetation")
+        run_command(["conda", "activate", "pdal"])
         run_command(["pdal", "pipeline", "src/p_vegetation.json"])
+
+    run_command(["conda", "deactivate"])
 
     #TODO vectorise ? To make blurry outline ?
 
@@ -59,13 +65,16 @@ if process_building:
 
     if with_pdal_pipeline:
         print("pipeline building")
+        run_command(["conda", "activate", "pdal"])
         run_command(["pdal", "pipeline", "src/p_building.json"])
+
+    run_command(["conda", "deactivate"])
 
     print("clean building.tif")
     sequential_buffer_tiff("tmp/building.tif", "tmp/building_clean.tif", [3, -3])
 
     print("vectorise")
-    run_command('gdal_polygonize.py tmp/building_clean.tif -f "GPKG" tmp/building.gpkg')
+    run_command(["gdal_polygonize.py", "tmp/building_clean.tif", "-f", '"GPKG"', "tmp/building.gpkg"])
 
     print("simplify")
     run_command('ogr2ogr -f "GPKG" tmp/building_simplified.gpkg tmp/building.gpkg -simplify 1')
