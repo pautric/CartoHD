@@ -13,7 +13,7 @@ test https://www.shadedrelief.com/texture_shading/
 
 process_dsm = False
 process_dtm = False
-process_vegetation = False
+process_vegetation = True
 process_building = True
 
 
