@@ -87,4 +87,4 @@ if process_building:
     #check if not too strong ?
     #check why double ?
     print("simplify")
-    run_command(["ogr2ogr", "-f", "GPKG", "tmp/building_simplified.gpkg", "tmp/building.gpkg", "-simplify", "1"])
+    run_command(["ogr2ogr", "-f", "GPKG", "-overwrite", "tmp/building_simplified.gpkg", "tmp/building.gpkg", "-simplify", "1"])
