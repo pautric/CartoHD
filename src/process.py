@@ -11,11 +11,11 @@ test https://www.shadedrelief.com/texture_shading/
 
 '''
 
-process_dsm = False
-process_dtm = False
-process_vegetation = False
+process_dsm = True
+process_dtm = True
+process_vegetation = True
 process_building = True
-with_pdal_pipeline = False
+with_pdal_pipeline = True
 
 
 # ensure pdal command is available through conda install
@@ -28,10 +28,10 @@ if process_dsm:
         run_command(["pdal", "pipeline", "src/p_dsm.json"])
 
     #TODO: remove outliers
-    #TODO: smooth ?
 
     print("fill dsm no data")
     #TODO: should not be linear
+    #TODO: smooth ?
     run_command(["gdal_fillnodata.py", "-md", "20", "-of", "GTiff", "tmp/dsm_raw.tif", "tmp/dsm.tif"])
 
     print("dsm hillshading")
@@ -50,6 +50,9 @@ if process_dtm:
 
     print("fill dtm no data")
     run_command(["gdal_fillnodata.py", "-md", "50", "-of", "GTiff", "tmp/dtm_raw.tif", "tmp/dtm.tif"])
+
+    print("dtm slope")
+    run_command(["gdaldem", "slope", "tmp/dtm_raw.tif", "tmp/slope_dtm.tif", "-s", "1"])
 
     print("smooth dtm")
     smooth("tmp/dtm.tif", "tmp/dtm_smoothed.tif", 6)
