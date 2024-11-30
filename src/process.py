@@ -85,5 +85,6 @@ if process_building:
     run_command(["gdal_polygonize.py", "tmp/building_clean.tif", "-f", "GPKG", "tmp/building.gpkg"])
 
     #check if not too strong ?
+    #check why double ?
     print("simplify")
     run_command(["ogr2ogr", "-f", "GPKG", "tmp/building_simplified.gpkg", "tmp/building.gpkg", "-simplify", "1"])
