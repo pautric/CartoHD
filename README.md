@@ -9,6 +9,10 @@ Some tests for large scale cartography using LIDAR data
 
 ![map with LIDAR data](/img/arcon/anim.gif)
 
+![map with LIDAR data](/img/misc/ch_mars.png)
+
+![map with LIDAR data](/img/misc/ensg.png)
+
 ![map with LIDAR data](/img/arcon/arcon_3000.png)
 
 ![map with LIDAR data](/img/arcon/arcon_1500.png)
