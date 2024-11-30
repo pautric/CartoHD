@@ -11,11 +11,11 @@ test https://www.shadedrelief.com/texture_shading/
 
 '''
 
-process_dsm = True
-process_dtm = True
-process_vegetation = True
+process_dsm = False
+process_dtm = False
+process_vegetation = False
 process_building = True
-with_pdal_pipeline = True
+with_pdal_pipeline = False
 
 
 # ensure pdal command is available through conda install
@@ -84,7 +84,6 @@ if process_building:
     print("vectorise")
     run_command(["gdal_polygonize.py", "-overwrite", "tmp/building_clean.tif", "-f", "GPKG", "tmp/building.gpkg"])
 
-    #check if not too strong ?
-    #check why double ?
     print("simplify")
     run_command(["ogr2ogr", "-f", "GPKG", "-overwrite", "tmp/building_simplified.gpkg", "tmp/building.gpkg", "-simplify", "0.5"])
+
