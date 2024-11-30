@@ -13,11 +13,9 @@ Some tests for large scale cartography using LIDAR data
 
 ![map with LIDAR data](/img/misc/ensg.png)
 
-![map with LIDAR data](/img/arcon/arcon_3000.png)
+![map with LIDAR data](/img/arcon/1000.png)
 
-![map with LIDAR data](/img/arcon/arcon_1500.png)
+![map with LIDAR data](/img/arcon/2000.png)
 
-![map with LIDAR data](/img/arcon/arcon_750.png)
-
-![map with LIDAR data](/img/arcon/arcon_375.png)
+![map with LIDAR data](/img/arcon/4000.png)
 
