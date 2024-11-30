@@ -82,7 +82,7 @@ if process_building:
     sequential_buffer_tiff("tmp/building.tif", "tmp/building_clean.tif", [3, -3])
 
     print("vectorise")
-    run_command(["gdal_polygonize.py", "tmp/building_clean.tif", "-f", "GPKG", "tmp/building.gpkg"])
+    run_command(["gdal_polygonize.py", "-overwrite", "tmp/building_clean.tif", "-f", "GPKG", "tmp/building.gpkg"])
 
     #check if not too strong ?
     #check why double ?
