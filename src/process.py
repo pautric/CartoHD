@@ -36,10 +36,10 @@ if process_dsm:
     os.remove(output_folder+"dsm_raw.tif")
 
     print("dsm hillshading")
-    run_command(["gdaldem", "hillshade", output_folder+"dsm.tif", output_folder+"hillshade.tif", "-z", "1", "-s", "1", "-az", "315", "-alt", "45"])
+    run_command(["gdaldem", "hillshade", output_folder+"dsm.tif", output_folder+"hillshade_dsm.tif", "-z", "1", "-s", "1", "-az", "315", "-alt", "45"])
 
     print("dsm slope")
-    run_command(["gdaldem", "slope", output_folder+"dsm.tif", output_folder+"slope.tif", "-s", "1"])
+    run_command(["gdaldem", "slope", output_folder+"dsm.tif", output_folder+"slope_dsm.tif", "-s", "1"])
 
     #TODO: make shadow depth
 
