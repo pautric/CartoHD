@@ -95,5 +95,5 @@ if process_building:
 
     print("simplify")
     run_command(["ogr2ogr", "-f", "GPKG", "-overwrite", output_folder+"building_simplified.gpkg", output_folder+"building.gpkg", "-simplify", "0.5"])
-    os.remove(output_folder+"building.tif")
+    os.remove(output_folder+"building.gpkg")
 
