@@ -1,10 +1,7 @@
 from lib import run_command, sequential_buffer_tiff, smooth, contour_type_field
 
 '''
-target scale: 1:1000
-
 test ambient oclusion - only for buildings
-blurry water ?
 contour labels
 test https://www.shadedrelief.com/texture_shading/
 
