@@ -16,6 +16,8 @@ process_vegetation = True
 process_building = True
 with_pdal_pipeline = True
 
+input_folder = ""
+output_folder = "tmp/"
 
 # ensure pdal command is available through conda install
 #if with_pdal_pipeline: run_command(["conda", "activate", "pdal"])
@@ -31,13 +33,13 @@ if process_dsm:
     print("fill dsm no data")
     #TODO: should not be linear
     #TODO: smooth ?
-    run_command(["gdal_fillnodata.py", "-md", "20", "-of", "GTiff", "tmp/dsm_raw.tif", "tmp/dsm.tif"])
+    run_command(["gdal_fillnodata.py", "-md", "20", "-of", "GTiff", output_folder+"dsm_raw.tif", output_folder+"dsm.tif"])
 
     print("dsm hillshading")
-    run_command(["gdaldem", "hillshade", "tmp/dsm.tif", "tmp/hillshade.tif", "-z", "1", "-s", "1", "-az", "315", "-alt", "45"])
+    run_command(["gdaldem", "hillshade", output_folder+"dsm.tif", output_folder+"hillshade.tif", "-z", "1", "-s", "1", "-az", "315", "-alt", "45"])
 
     print("dsm slope")
-    run_command(["gdaldem", "slope", "tmp/dsm.tif", "tmp/slope.tif", "-s", "1"])
+    run_command(["gdaldem", "slope", output_folder+"dsm.tif", output_folder+"slope.tif", "-s", "1"])
 
     #TODO: make shadows
 
@@ -48,19 +50,19 @@ if process_dtm:
         run_command(["pdal", "pipeline", "src/p_dtm.json"])
 
     print("fill dtm no data")
-    run_command(["gdal_fillnodata.py", "-md", "50", "-of", "GTiff", "tmp/dtm_raw.tif", "tmp/dtm.tif"])
+    run_command(["gdal_fillnodata.py", "-md", "50", "-of", "GTiff", output_folder+"dtm_raw.tif", output_folder+"dtm.tif"])
 
     print("dtm slope")
-    run_command(["gdaldem", "slope", "tmp/dtm_raw.tif", "tmp/slope_dtm.tif", "-s", "1"])
+    run_command(["gdaldem", "slope", output_folder+"dtm_raw.tif", output_folder+"slope_dtm.tif", "-s", "1"])
 
     print("smooth dtm")
-    smooth("tmp/dtm.tif", "tmp/dtm_smoothed.tif", 6)
+    smooth(output_folder+"dtm.tif", output_folder+"dtm_smoothed.tif", 6)
 
     print("make contours")
-    run_command(["gdal_contour", "-a", "elevation", "-i", "1", "tmp/dtm_smoothed.tif", "-f", "GPKG", "tmp/contours.gpkg"])
+    run_command(["gdal_contour", "-a", "elevation", "-i", "1", output_folder+"dtm_smoothed.tif", "-f", "GPKG", output_folder+"contours.gpkg"])
 
     print("set contours type")
-    contour_type_field("tmp/contours.gpkg", "contour")
+    contour_type_field(output_folder+"contours.gpkg", "contour")
 
 
 if process_vegetation:
@@ -72,7 +74,7 @@ if process_vegetation:
     #TODO vectorise ? To make blurry outline ?
 
     print("clean vegetation.tif")
-    sequential_buffer_tiff("tmp/vegetation.tif", "tmp/vegetation_clean.tif", [-2, 2])
+    sequential_buffer_tiff(output_folder+"vegetation.tif", output_folder+"vegetation_clean.tif", [-2, 2])
 
 if process_building:
 
@@ -81,11 +83,11 @@ if process_building:
         run_command(["pdal", "pipeline", "src/p_building.json"])
 
     print("clean building.tif")
-    sequential_buffer_tiff("tmp/building.tif", "tmp/building_clean.tif", [3, -3])
+    sequential_buffer_tiff(output_folder+"building.tif", output_folder+"building_clean.tif", [3, -3])
 
     print("vectorise")
-    run_command(["gdal_polygonize.py", "-overwrite", "tmp/building_clean.tif", "-f", "GPKG", "tmp/building.gpkg"])
+    run_command(["gdal_polygonize.py", "-overwrite", output_folder+"building_clean.tif", "-f", "GPKG", output_folder+"building.gpkg"])
 
     print("simplify")
-    run_command(["ogr2ogr", "-f", "GPKG", "-overwrite", "tmp/building_simplified.gpkg", "tmp/building.gpkg", "-simplify", "0.5"])
+    run_command(["ogr2ogr", "-f", "GPKG", "-overwrite", output_folder+"building_simplified.gpkg", output_folder+"building.gpkg", "-simplify", "0.5"])
 
