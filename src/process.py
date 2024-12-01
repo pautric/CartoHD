@@ -5,7 +5,6 @@ target scale: 1:1000
 
 test ambient oclusion - only for buildings
 blurry water ?
-more topo names ?
 contour labels
 test https://www.shadedrelief.com/texture_shading/
 
