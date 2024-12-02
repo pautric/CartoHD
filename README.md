@@ -24,15 +24,15 @@ Some tests for large scale cartography using LIDAR data
 
 ![map with LIDAR data](/img/misc/contas.png)
 
-![map with LIDAR data](/img/misc/marseille.png)
+![map with LIDAR data](/img/misc/marseille.jpg)
 
-![map with LIDAR data](/img/misc/marseille1.png)
+![map with LIDAR data](/img/misc/marseille1.jpg)
 
-![map with LIDAR data](/img/misc/marseille2.png)
+![map with LIDAR data](/img/misc/marseille2.jpg)
 
 ![map with LIDAR data](/img/misc/athenee.png)
 
-![map with LIDAR data](/img/misc/carcassonne.png)
+![map with LIDAR data](/img/misc/carcassonne.jpg)
 
 ![map with LIDAR data](/img/arcon/1000.png)
 
@@ -40,4 +40,4 @@ Some tests for large scale cartography using LIDAR data
 
 ![map with LIDAR data](/img/arcon/4000.png)
 
-![map with LIDAR data](/img/misc/arcon_black_white.png)
+![map with LIDAR data](/img/misc/arcon_black_white.jpg)
