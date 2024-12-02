@@ -3,7 +3,7 @@
 Some tests for large scale cartography using LIDAR data
 
 - hillshaded and sloped LIDAR DSM, as grayscale
-- shadow depth simulation
+- shadow depth simulation from DSM
 - hue from classification for vegetation and buildings
 - BD Topo for roads (white) and water bodies (blue), etc.
 - RPC for fields
