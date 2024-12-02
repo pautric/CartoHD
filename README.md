@@ -12,15 +12,15 @@ Some tests for large scale cartography using LIDAR data
 
 ![map with LIDAR data](/img/misc/ch_mars.png)
 
-![map with LIDAR data](/img/misc/notre_dame.png)
+![map with LIDAR data](/img/misc/notre_dame.jpg)
 
 ![map with LIDAR data](/img/misc/ensg.png)
 
-![map with LIDAR data](/img/misc/olive.png)
+![map with LIDAR data](/img/misc/olive.jpg)
 
-![map with LIDAR data](/img/misc/kirchberg1.png)
+![map with LIDAR data](/img/misc/kirchberg1.jpg)
 
-![map with LIDAR data](/img/misc/kirchberg2.png)
+![map with LIDAR data](/img/misc/kirchberg2.jpg)
 
 ![map with LIDAR data](/img/misc/contas.png)
 
