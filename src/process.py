@@ -49,12 +49,12 @@ if process_dtm:
         print("pipeline DTM")
         run_command(["pdal", "pipeline", "src/p_dtm.json"])
 
+    print("dtm slope")
+    run_command(["gdaldem", "slope", output_folder+"dtm_raw.tif", output_folder+"slope_dtm.tif", "-s", "1"])
+
     print("fill dtm no data")
     run_command(["gdal_fillnodata.py", "-md", "50", "-of", "GTiff", output_folder+"dtm_raw.tif", output_folder+"dtm.tif"])
     os.remove(output_folder+"dtm_raw.tif")
-
-    print("dtm slope")
-    run_command(["gdaldem", "slope", output_folder+"dtm_raw.tif", output_folder+"slope_dtm.tif", "-s", "1"])
 
     print("smooth dtm")
     smooth(output_folder+"dtm.tif", output_folder+"dtm_smoothed.tif", 6)
