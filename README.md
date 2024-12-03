@@ -1,6 +1,6 @@
 # CartoHD
 
-Some tests for large scale cartography using LIDAR data
+[CartoHD](https://github.com/jgaffuri/CartoHD/) is a tool for producing large scale and high definition maps from [LIDAR](https://en.wikipedia.org/wiki/Lidar) data.
 
 - hillshaded and sloped LIDAR DSM, as grayscale
 - shadow depth simulation from DSM
