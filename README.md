@@ -5,12 +5,15 @@
 ![map with LIDAR data](/img/arcon/anim.gif)
 
 
-## Process
+## Main process steps
 
-- Hillshaded and sloped LIDAR DSM, as grayscale.
-- Shadow depth simulation from DSM.
-- Hue from classification for vegetation and buildings.
-- Cartographic drafting with external software. Overlay of auxilary vector topographic data from national topographic databases.
+- Production of 20cm resolution [Digital Surface Model (DSM) and Digital Terrain Model (DTM)](https://en.wikipedia.org/wiki/Digital_elevation_model) from [LIDAR](https://en.wikipedia.org/wiki/Lidar) points. Rough gap filling for no data pixels.
+- DSM: Computation of hillshading, slope and shadow depth.
+- DTM: Computation of slope (to detect vertical terrain features). Production of contour lines, 1m interval. Classification of the contours.
+- Production of 20cm resolution images of buildings and vegetation areas using LIDAR classification. Application of various morphological operators to extract main patches and eliminate noise.
+- Vectorisation of the buildings image. Simplification of the building features with douglass-peucker filter.
+- Cartographic design with software (such as [QGIS](https://www.qgis.org/)). Overlay of auxilary vector topographic data from national topographic databases: Cadastral and agriculture parcels, water bodies, transport networks, geographical names, etc.
+- Suitable scales: 1:500 to 1:5000.
 
 ## Usage
 
