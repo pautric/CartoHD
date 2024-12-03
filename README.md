@@ -15,9 +15,13 @@
 
 ## Usage
 
-[CartoHD](https://github.com/jgaffuri/CartoHD/) is a python process. It requires [PDAL](https://pdal.io/) and [GDAL](https://gdal.org/) to be installed as command line programs.
+[CartoHD](https://github.com/jgaffuri/CartoHD/) is a python process. Input data are LIDAR files in LAZ or LAS format. It requires [PDAL](https://pdal.io/) and [GDAL](https://gdal.org/) to be installed as command line programs.
 
-
+- Check PDAL and GDAL are installed
+- Edit the PDAL pipeline *.json files to specify where the input data is located, under `"filename"` field.
+- Edit the `process.py` file to specify where the output data should be created. Default is `output_folder = "tmp/"`
+- Run `process.py` python script.
+- Use the ouptut files with your favorite GIS/mapping software to apply the style you prefer, and overlay some auxilary topographic data. Some examples of QGIS projects are provided for France and Luxembourg.
 
 ## Gallery
 
