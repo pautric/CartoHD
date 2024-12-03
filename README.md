@@ -2,11 +2,21 @@
 
 [CartoHD](https://github.com/jgaffuri/CartoHD/) is a tool for producing large scale and high definition maps from [LIDAR](https://en.wikipedia.org/wiki/Lidar) data.
 
+## Process
+
 - hillshaded and sloped LIDAR DSM, as grayscale
 - shadow depth simulation from DSM
 - hue from classification for vegetation and buildings
 - BD Topo for roads (white) and water bodies (blue), etc.
 - RPC for fields
+
+## Usage
+
+[CartoHD](https://github.com/jgaffuri/CartoHD/) is a python process. It requires [PDAL](https://pdal.io/) and [GDAL](https://gdal.org/) to be installed as command line programs.
+
+
+
+## Gallery
 
 ![map with LIDAR data](/img/arcon/anim.gif)
 
