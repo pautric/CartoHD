@@ -2,6 +2,9 @@
 
 [CartoHD](https://github.com/jgaffuri/CartoHD/) is a tool for producing large scale and high definition maps from [LIDAR](https://en.wikipedia.org/wiki/Lidar) data.
 
+![map with LIDAR data](/img/arcon/anim.gif)
+
+
 ## Process
 
 - hillshaded and sloped LIDAR DSM, as grayscale
@@ -17,8 +20,6 @@
 
 
 ## Gallery
-
-![map with LIDAR data](/img/arcon/anim.gif)
 
 ![map with LIDAR data](/img/misc/kirchberg_.png)
 
