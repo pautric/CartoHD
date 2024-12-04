@@ -8,6 +8,16 @@
         "limits": "Classification[6:6]"
     },
     {
+        "type": "filters.ferry",
+        "dimensions": "Z=>elevation"
+    },
+    {
+        "type": "writers.gdal",
+        "filename": "tmp/dsm_building.tif",
+        "resolution": 0.2,
+        "output_type": "max"
+    },
+    {
         "type": "filters.assign",
         "assignment": "Z[:]=1"
     },
