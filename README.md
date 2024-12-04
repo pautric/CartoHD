@@ -19,15 +19,17 @@
 
 [CartoHD](https://github.com/jgaffuri/CartoHD/) is a python process. Input data are LIDAR files in LAZ or LAS format. It requires [PDAL](https://pdal.io/) and [GDAL](https://gdal.org/) to be installed as command line programs.
 
-- Check PDAL and GDAL are installed.
-- Edit the PDAL pipeline `*.json` files to specify where the input data is located, under `"filename"` field.
-- Edit the `process.py` file to specify where the output data should be created. Default is `output_folder = "tmp/"`.
+- Check PDAL and GDAL are installed as command. Run `pdal` and `ogr2ogr` commands (for example) in a command prompt.
+- Edit the PDAL pipeline `*.json` files to specify where the input LAZ or LAS file(s) is/are located, under `"filename"` field.
+- Edit the `process.py` file to specify where the output data should be saved, under `output_folder` variable. Default is `output_folder = "tmp/"`.
 - Run `process.py` python script.
 - Use the ouptut files with your favorite GIS/mapping software to apply the style you prefer, and overlay some auxilary topographic data. Some examples of QGIS projects are provided for France and Luxembourg.
 
-TODO: describe shadow depth
+TODO: describe shadow depth computation with qgis
 
 ## Gallery
+
+These example were produced using [ACT-LIDAR data](https://act.public.lu/fr/cartographie/lidar1.html) for Luxembourg and [IGN-LIDAR-HD](https://geoservices.ign.fr/lidarhd) data for France.
 
 ![map with LIDAR data](/img/misc/kirchberg_.png)
 
