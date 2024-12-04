@@ -9,7 +9,7 @@
 
 - Production of 20cm resolution [Digital Surface Model (DSM) and Digital Terrain Model (DTM)](https://en.wikipedia.org/wiki/Digital_elevation_model) from [LIDAR](https://en.wikipedia.org/wiki/Lidar) points. Rough gap filling for no data pixels.
 - DSM: Computation of hillshading, slope and shadow depth.
-- DTM: Computation of slope (to detect vertical terrain features). Production of contour lines, 1m interval. Classification of the contours.
+- DTM: Computation of slope (to detect and show vertical terrain features). Production of contour lines, 1m interval. Classification of the contour lines.
 - Production of 20cm resolution images of buildings and vegetation areas using LIDAR classification. Application of various morphological operators to extract main patches and eliminate noise.
 - Vectorisation of the buildings image. Simplification of the building features with douglass-peucker filter.
 - Cartographic design with software (such as [QGIS](https://www.qgis.org/)). Overlay of auxilary vector topographic data from national topographic databases: Cadastral and agriculture parcels, water bodies, transport networks, geographical names, etc.
