@@ -58,7 +58,7 @@ if process_dtm:
 
     print("smooth dtm")
     smooth(output_folder+"dtm.tif", output_folder+"dtm_smoothed.tif", 6)
-    os.remove(output_folder+"dtm.tif")
+    #os.remove(output_folder+"dtm.tif")
 
     print("make contours")
     run_command(["gdal_contour", "-a", "elevation", "-i", "1", output_folder+"dtm_smoothed.tif", "-f", "GPKG", output_folder+"contours.gpkg"])
