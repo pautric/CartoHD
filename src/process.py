@@ -35,8 +35,8 @@ if process_dsm:
     run_command(["gdal_fillnodata.py", "-md", "20", "-of", "GTiff", output_folder+"dsm_raw.tif", output_folder+"dsm.tif"])
     os.remove(output_folder+"dsm_raw.tif")
 
-    print("dsm hillshading")
-    run_command(["gdaldem", "hillshade", output_folder+"dsm.tif", output_folder+"hillshade_dsm.tif", "-z", "1", "-s", "1", "-az", "315", "-alt", "45"])
+    #print("dsm hillshading")
+    #run_command(["gdaldem", "hillshade", output_folder+"dsm.tif", output_folder+"hillshade_dsm.tif", "-z", "1", "-s", "1", "-az", "315", "-alt", "45"])
 
     print("dsm slope")
     run_command(["gdaldem", "slope", output_folder+"dsm.tif", output_folder+"slope_dsm.tif", "-s", "1"])
