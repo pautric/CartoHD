@@ -63,4 +63,6 @@ These example were produced using [ACT-LIDAR data](https://act.public.lu/fr/cart
 
 ![map with LIDAR data](/img/arcon/4000.png)
 
+![map with LIDAR data](/img/misc/shading_test.gif)
+
 ![map with LIDAR data](/img/misc/arcon_black_white.jpg)
