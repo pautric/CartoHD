@@ -1,10 +1,10 @@
+from math import hypot
 import subprocess
 import numpy as np
 import rasterio
 import geopandas as gpd
 from scipy.ndimage import binary_dilation, gaussian_filter, binary_erosion, convolve
 from rasterio.transform import from_origin
-#from tqdm import tqdm  # For progress bar
 
 
 
@@ -338,7 +338,7 @@ def calculate_shadowXXX(input_tiff, output_tiff, direction = 315, sun_angle = 30
 #TODO test !
 
 
-def compute_rayshading(input_file: str, output_file: str, light_azimuth: float, light_altitude: float):
+def compute_rayshading(input_file: str, output_file: str, light_azimuth: float = 315, light_altitude: float = 30, max: int = 100):
     """
     Compute rayshading for a DEM using a ray-casting algorithm.
 
@@ -360,9 +360,9 @@ def compute_rayshading(input_file: str, output_file: str, light_azimuth: float, 
     """
     with rasterio.open(input_file) as src:
         dem = src.read(1)  # Read DEM data
-        transform = src.transform  # Geospatial transform
-        pixel_size_x = transform[0]
-        pixel_size_y = -transform[4]
+        #transform = src.transform  # Geospatial transform
+        #pixel_size_x = transform[0]
+        #pixel_size_y = -transform[4]
 
     # Dimensions of the DEM
     rows, cols = dem.shape
@@ -377,31 +377,40 @@ def compute_rayshading(input_file: str, output_file: str, light_azimuth: float, 
     dz = np.tan(altitude_rad)  # Light movement in height
 
     # Normalize light direction for stepping
-    step_size = max(abs(dx), abs(dy))  # Ensure consistent stepping
-    dx /= step_size
-    dy /= step_size
+    #step_size = max(abs(dx), abs(dy))  # Ensure consistent stepping
+    #dx /= step_size
+    #dy /= step_size
 
     # Initialize output array
     rayshaded = np.ones_like(dem, dtype=np.uint8)  # 1 = illuminated, 0 = shadowed
 
+    #print(rows, cols)
+    #print(dx, dy, dz)
+
     # Ray-casting algorithm
     for row in range(rows):
+        print(row)
         for col in range(cols):
-            current_elevation = dem[row, col]
+            z0 = dem[row, col]
             shadowed = False
 
+            #print(row, col, z0)
+
             # Step along the ray direction
-            x, y = col + 0.5, row + 0.5  # Start at the center of the current pixel
-            z = current_elevation
+            x0, y0 = col + 0.5, row + 0.5  # Start at the center of the current pixel
+            x,y,z = x0,y0,z0
 
             while 0 <= x < cols and 0 <= y < rows:
                 x += dx
                 y += dy
-                z += dz * step_size
+                z += dz #* step_size
+
+                distance = hypot(x-x0,y-y0,z-z0)
+                if distance > max: break
 
                 # Get the elevation of the pixel at (x, y) using bilinear interpolation
                 x_floor, y_floor = int(np.floor(x)), int(np.floor(y))
-                x_ceil, y_ceil = int(np.ceil(x)), int(np.ceil(y))
+                #x_ceil, y_ceil = int(np.ceil(x)), int(np.ceil(y))
 
                 if 0 <= x_floor < cols and 0 <= y_floor < rows:
                     elevation = dem[y_floor, x_floor]  # Approximation (nearest neighbor)
@@ -429,6 +438,12 @@ def compute_rayshading(input_file: str, output_file: str, light_azimuth: float, 
 
     print(f"Rayshaded relief saved to {output_file}")
     return rayshaded
+
+
+# Example usage
+compute_rayshading('/home/juju/Bureau/dsm.tif', '/home/juju/Bureau/shadow.tif', light_azimuth=315, light_altitude=30)
+
+
 
 
 
@@ -461,7 +476,7 @@ def compute_rayshading2(input_file: str, output_file: str, light_azimuth: float 
     
     nrows, ncols = dem.shape
     shadow = np.ones((nrows, ncols), dtype=np.uint8) * 255  # Start with full illumination (white = illuminated)
-    
+
     # Convert light direction to radians
     azimuth_rad = np.radians(light_azimuth)
     altitude_rad = np.radians(light_altitude)
@@ -471,17 +486,17 @@ def compute_rayshading2(input_file: str, output_file: str, light_azimuth: float 
     dy = np.cos(azimuth_rad)
     dz = np.tan(altitude_rad)
     
-    for i in tqdm(range(nrows), desc="Computing shadow map"):
+    for i in range(nrows):
         for j in range(ncols):
             # Position of the current pixel in real-world coordinates
-            x0 = j * resolution_x
-            y0 = i * resolution_y
+            #x0 = j * resolution_x
+            #y0 = i * resolution_y
             z0 = dem[i, j]
 
             # Ray tracing variables
             x, y = j, i  # Pixel indices in the array
             distance = 0
-            
+
             while True:
                 # Move along the ray in the direction of (dx, dy)
                 x += dx
@@ -490,7 +505,7 @@ def compute_rayshading2(input_file: str, output_file: str, light_azimuth: float 
 
                 # Get the nearest pixel indices
                 xi, yi = int(round(x)), int(round(y))
-                
+
                 # Check if the pixel is outside the bounds
                 if xi < 0 or yi < 0 or xi >= ncols or yi >= nrows:
                     break
@@ -500,7 +515,7 @@ def compute_rayshading2(input_file: str, output_file: str, light_azimuth: float 
                 
                 # Get the elevation of the current pixel along the ray
                 elevation_at_pixel = dem[yi, xi]
-                
+
                 # Check if the current pixel blocks the sun ray
                 if elevation_at_pixel > height_of_sun_ray:
                     shadow[i, j] = 0  # Pixel is in shadow (black = shadow)
@@ -522,25 +537,4 @@ def compute_rayshading2(input_file: str, output_file: str, light_azimuth: float 
     
     print(f"Shadow map saved to {output_file}")
     return shadow
-
-
-# Example usage
-# compute_rayshading('path/to/input_dem.tif', 'path/to/output_shadow.tif', light_azimuth=315, light_altitude=45)
-
-
-
-
-
-
-
-
-
-# Example usage
-# compute_rayshading('path/to/input_dem.tif', 'path/to/output_rayshaded.tif', light_azimuth=315, light_altitude=45)
-
-
-
-
-
-
 
