@@ -4,7 +4,7 @@ import rasterio
 import geopandas as gpd
 from scipy.ndimage import binary_dilation, gaussian_filter, binary_erosion, convolve
 from rasterio.transform import from_origin
-from tqdm import tqdm  # For progress bar
+#from tqdm import tqdm  # For progress bar
 
 
 
