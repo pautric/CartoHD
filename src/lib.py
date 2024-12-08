@@ -3,7 +3,8 @@ import numpy as np
 import rasterio
 import geopandas as gpd
 from scipy.ndimage import binary_dilation, gaussian_filter, binary_erosion, convolve
-
+from rasterio.transform import from_origin
+from tqdm import tqdm  # For progress bar
 
 
 
@@ -314,4 +315,232 @@ def calculate_shadowXXX(input_tiff, output_tiff, direction = 315, sun_angle = 30
 
 
 #calculate_shadowXXX("tmp/dsm.tif", "tmp/ZZZ_shadow.tif")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#TODO test !
+
+
+def compute_rayshading(input_file: str, output_file: str, light_azimuth: float, light_altitude: float):
+    """
+    Compute rayshading for a DEM using a ray-casting algorithm.
+
+    Parameters:
+    -----------
+    input_file : str
+        Path to the input DEM file (GeoTIFF).
+    output_file : str
+        Path where the output shaded relief image will be saved.
+    light_azimuth : float
+        Azimuth of the light source in degrees (0-360, 0=N, 90=E, 180=S, 270=W).
+    light_altitude : float
+        Altitude of the light source in degrees above the horizon (0-90).
+
+    Returns:
+    --------
+    rayshaded : np.ndarray
+        The computed rayshaded image (0=shadow, 1=illuminated).
+    """
+    with rasterio.open(input_file) as src:
+        dem = src.read(1)  # Read DEM data
+        transform = src.transform  # Geospatial transform
+        pixel_size_x = transform[0]
+        pixel_size_y = -transform[4]
+
+    # Dimensions of the DEM
+    rows, cols = dem.shape
+
+    # Convert light direction to radians
+    azimuth_rad = np.radians(light_azimuth)
+    altitude_rad = np.radians(light_altitude)
+
+    # Calculate light direction vector
+    dx = np.sin(azimuth_rad)  # Light movement in x direction
+    dy = np.cos(azimuth_rad)  # Light movement in y direction
+    dz = np.tan(altitude_rad)  # Light movement in height
+
+    # Normalize light direction for stepping
+    step_size = max(abs(dx), abs(dy))  # Ensure consistent stepping
+    dx /= step_size
+    dy /= step_size
+
+    # Initialize output array
+    rayshaded = np.ones_like(dem, dtype=np.uint8)  # 1 = illuminated, 0 = shadowed
+
+    # Ray-casting algorithm
+    for row in range(rows):
+        for col in range(cols):
+            current_elevation = dem[row, col]
+            shadowed = False
+
+            # Step along the ray direction
+            x, y = col + 0.5, row + 0.5  # Start at the center of the current pixel
+            z = current_elevation
+
+            while 0 <= x < cols and 0 <= y < rows:
+                x += dx
+                y += dy
+                z += dz * step_size
+
+                # Get the elevation of the pixel at (x, y) using bilinear interpolation
+                x_floor, y_floor = int(np.floor(x)), int(np.floor(y))
+                x_ceil, y_ceil = int(np.ceil(x)), int(np.ceil(y))
+
+                if 0 <= x_floor < cols and 0 <= y_floor < rows:
+                    elevation = dem[y_floor, x_floor]  # Approximation (nearest neighbor)
+
+                    # Check if this pixel blocks the current pixel
+                    if elevation > z:
+                        shadowed = True
+                        break
+
+            rayshaded[row, col] = 0 if shadowed else 1  # Mark shadowed pixels
+
+    # Save rayshaded result as GeoTIFF
+    with rasterio.open(
+        output_file,
+        'w',
+        driver='GTiff',
+        height=rayshaded.shape[0],
+        width=rayshaded.shape[1],
+        count=1,
+        dtype='uint8',
+        crs=src.crs,
+        transform=src.transform,
+    ) as dst:
+        dst.write(rayshaded, 1)
+
+    print(f"Rayshaded relief saved to {output_file}")
+    return rayshaded
+
+
+
+
+#TODO test !
+
+def compute_rayshading2(input_file: str, output_file: str, light_azimuth: float = 315, light_altitude: float = 45):
+    """
+    Compute ray shading from a DEM (Digital Elevation Model) in GeoTIFF format.
+    
+    Each pixel's shadow is calculated by checking if higher elevation pixels along 
+    the sun's ray path block the sunlight.
+
+    Parameters:
+    -----------
+    input_file : str
+        Path to the input DEM file (GeoTIFF).
+    output_file : str
+        Path where the output shaded relief image will be saved.
+    light_azimuth : float
+        Azimuth of the light source in degrees (0-360, with 0=N, 90=E, 180=S, 270=W). Default is 315° (NW).
+    light_altitude : float
+        Altitude of the light source in degrees above the horizon (0-90). Default is 45°.
+    """
+    with rasterio.open(input_file) as src:
+        dem = src.read(1).astype(float)  # Elevation data
+        transform = src.transform
+        resolution_x = transform[0]
+        resolution_y = -transform[4]  # y-axis resolution (negative in GeoTIFF)
+    
+    nrows, ncols = dem.shape
+    shadow = np.ones((nrows, ncols), dtype=np.uint8) * 255  # Start with full illumination (white = illuminated)
+    
+    # Convert light direction to radians
+    azimuth_rad = np.radians(light_azimuth)
+    altitude_rad = np.radians(light_altitude)
+    
+    # Calculate the unit vector of the sun ray
+    dx = np.sin(azimuth_rad)
+    dy = np.cos(azimuth_rad)
+    dz = np.tan(altitude_rad)
+    
+    for i in tqdm(range(nrows), desc="Computing shadow map"):
+        for j in range(ncols):
+            # Position of the current pixel in real-world coordinates
+            x0 = j * resolution_x
+            y0 = i * resolution_y
+            z0 = dem[i, j]
+
+            # Ray tracing variables
+            x, y = j, i  # Pixel indices in the array
+            distance = 0
+            
+            while True:
+                # Move along the ray in the direction of (dx, dy)
+                x += dx
+                y += dy
+                distance += 1
+
+                # Get the nearest pixel indices
+                xi, yi = int(round(x)), int(round(y))
+                
+                # Check if the pixel is outside the bounds
+                if xi < 0 or yi < 0 or xi >= ncols or yi >= nrows:
+                    break
+                
+                # Calculate the height of the sun ray at this point
+                height_of_sun_ray = z0 + distance * dz
+                
+                # Get the elevation of the current pixel along the ray
+                elevation_at_pixel = dem[yi, xi]
+                
+                # Check if the current pixel blocks the sun ray
+                if elevation_at_pixel > height_of_sun_ray:
+                    shadow[i, j] = 0  # Pixel is in shadow (black = shadow)
+                    break
+    
+    # Save the shadow map as a GeoTIFF
+    with rasterio.open(
+        output_file,
+        'w',
+        driver='GTiff',
+        height=shadow.shape[0],
+        width=shadow.shape[1],
+        count=1,
+        dtype='uint8',
+        crs=src.crs,
+        transform=src.transform,
+    ) as dst:
+        dst.write(shadow, 1)
+    
+    print(f"Shadow map saved to {output_file}")
+    return shadow
+
+
+# Example usage
+# compute_rayshading('path/to/input_dem.tif', 'path/to/output_shadow.tif', light_azimuth=315, light_altitude=45)
+
+
+
+
+
+
+
+
+
+# Example usage
+# compute_rayshading('path/to/input_dem.tif', 'path/to/output_rayshaded.tif', light_azimuth=315, light_altitude=45)
+
+
+
+
+
+
 
