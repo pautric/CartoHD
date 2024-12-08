@@ -73,14 +73,14 @@ if process_vegetation:
         print("pipeline vegetation")
         run_command(["pdal", "pipeline", "src/p_vegetation.json"])
 
+    print("vegetation slope")
+    run_command(["gdaldem", "slope", output_folder+"dsm_vegetation.tif", output_folder+"slope_vegetation.tif", "-s", "1"])
+
     #TODO vectorise ? To make blurry outline ?
 
     print("clean vegetation.tif")
     sequential_buffer_tiff(output_folder+"vegetation.tif", output_folder+"vegetation_clean.tif", [-2, 2])
     os.remove(output_folder+"vegetation.tif")
-
-    print("vegetation slope")
-    run_command(["gdaldem", "slope", output_folder+"vegetation_clean.tif", output_folder+"slope_vegetation.tif", "-s", "1"])
 
 if process_building:
 
@@ -89,7 +89,7 @@ if process_building:
         run_command(["pdal", "pipeline", "src/p_building.json"])
 
     print("building slope")
-    run_command(["gdaldem", "slope", output_folder+"building.tif", output_folder+"slope_building.tif", "-s", "1"])
+    run_command(["gdaldem", "slope", output_folder+"dsm_building.tif", output_folder+"slope_building.tif", "-s", "1"])
 
     print("clean building.tif")
     sequential_buffer_tiff(output_folder+"building.tif", output_folder+"building_clean.tif", [3, -3])
