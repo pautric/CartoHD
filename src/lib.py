@@ -274,5 +274,5 @@ def compute_rayshading(input_file: str, output_file: str, light_azimuth: float =
 
 
 # Example usage
-compute_rayshading('/home/juju/Bureau/dsm.tif', '/home/juju/Bureau/shadow.tif', light_azimuth=315, light_altitude=30)
+#compute_rayshading('/home/juju/Bureau/dsm.tif', '/home/juju/Bureau/shadow.tif', light_azimuth=315, light_altitude=30)
 
