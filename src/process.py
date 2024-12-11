@@ -95,6 +95,7 @@ if process_building:
     sequential_buffer_tiff(output_folder+"building.tif", output_folder+"building_clean.tif", [3, -3])
     os.remove(output_folder+"building.tif")
 
+
     print("vectorise")
     run_command(["gdal_polygonize.py", "-overwrite", output_folder+"building_clean.tif", "-f", "GPKG", output_folder+"building.gpkg"])
     os.remove(output_folder+"building_clean.tif")
