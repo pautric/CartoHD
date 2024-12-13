@@ -1,5 +1,6 @@
 from lib import run_command, sequential_buffer_tiff, smooth, contour_type_field
 import os
+import json
 
 
 '''
@@ -15,8 +16,13 @@ process_vegetation = True
 process_building = True
 with_pdal_pipeline = True
 
-input_folder = ""
-output_folder = "tmp/"
+input_lidar_data = "/home/juju/geodata/lidar/tour_eiffel.laz"
+output_folder = "/home/juju/lidar_mapping/eiffel"
+
+
+#create necessary folders
+os.makedirs(output_folder, exist_ok=True)
+os.makedirs("tmp/", exist_ok=True)
 
 # ensure pdal command is available through conda install
 #if with_pdal_pipeline: run_command(["conda", "activate", "pdal"])
@@ -25,7 +31,32 @@ if process_dsm:
 
     if with_pdal_pipeline:
         print("pipeline DSM")
-        run_command(["pdal", "pipeline", "src/p_dsm.json"])
+
+        data = [
+  {
+    "type": "readers.las",
+    "filename": input_lidar_data
+  },
+  {
+    "limits": "Classification![7:7]",
+    "type": "filters.range",
+    "tag": "nonoise"
+  },
+  {
+    "type": "filters.ferry",
+    "dimensions": "Z=>elevation"
+  },
+  {
+    "type": "writers.gdal",
+    "filename": output_folder+"dsm_raw.tif",
+    "resolution": 0.2,
+    "output_type": "max"
+  }
+]
+
+        with open("tmp/p_dsm.json", "w") as f: json.dump(data, f, indent=3)
+
+        run_command(["pdal", "pipeline", "tmp/p_dsm.json"])
 
     #TODO: remove outliers
 
@@ -47,7 +78,32 @@ if process_dtm:
 
     if with_pdal_pipeline:
         print("pipeline DTM")
-        run_command(["pdal", "pipeline", "src/p_dtm.json"])
+
+        data = [
+  {
+    "type": "readers.las",
+    "filename": input_lidar_data
+  },
+  {
+    "type": "filters.range",
+    "limits": "Classification[2:2]"
+  },
+  {
+    "type": "filters.ferry",
+    "dimensions": "Z=>elevation"
+  },
+  {
+    "type": "writers.gdal",
+    "filename": output_folder+"dtm_raw.tif",
+    "resolution": 0.2,
+    "output_type": "min"
+  }
+]
+
+        with open("tmp/p_dtm.json", "w") as f: json.dump(data, f, indent=3)
+
+        run_command(["pdal", "pipeline", "tmp/p_dtm.json"])
+
 
     print("dtm slope")
     run_command(["gdaldem", "slope", output_folder+"dtm_raw.tif", output_folder+"slope_dtm.tif", "-s", "1"])
@@ -71,7 +127,41 @@ if process_vegetation:
 
     if with_pdal_pipeline:
         print("pipeline vegetation")
-        run_command(["pdal", "pipeline", "src/p_vegetation.json"])
+
+        data = [
+    {
+        "type": "readers.las",
+        "filename": input_lidar_data
+    },
+    {
+        "type": "filters.range",
+        "limits": "Classification[3:5]"
+    },
+    {
+        "type": "filters.ferry",
+        "dimensions": "Z=>elevation"
+    },
+    {
+        "type": "writers.gdal",
+        "filename": output_folder+"dsm_vegetation.tif",
+        "resolution": 0.2,
+        "output_type": "max"
+    },
+    {
+        "type": "filters.assign",
+        "assignment": "Z[:]=1"
+    },
+    {
+        "type": "writers.gdal",
+        "filename": output_folder+"vegetation.tif",
+        "dimension": "Z",
+        "output_type": "max",
+        "resolution": 0.2
+    }
+]
+
+        with open("tmp/p_vegetation.json", "w") as f: json.dump(data, f, indent=3)
+        run_command(["pdal", "pipeline", "tmp/p_vegetation.json"])
 
     #print("vegetation slope")
     #run_command(["gdaldem", "slope", output_folder+"dsm_vegetation.tif", output_folder+"slope_vegetation.tif", "-s", "1"])
@@ -86,7 +176,42 @@ if process_building:
 
     if with_pdal_pipeline:
         print("pipeline building")
-        run_command(["pdal", "pipeline", "src/p_building.json"])
+
+        data = [
+    {
+        "type": "readers.las",
+        "filename": input_lidar_data
+    },
+    {
+        "type": "filters.range",
+        "limits": "Classification[6:6]"
+    },
+    {
+        "type": "filters.ferry",
+        "dimensions": "Z=>elevation"
+    },
+    {
+        "type": "writers.gdal",
+        "filename": output_folder+"dsm_building.tif",
+        "resolution": 0.2,
+        "output_type": "max"
+    },
+    {
+        "type": "filters.assign",
+        "assignment": "Z[:]=1"
+    },
+    {
+        "type": "writers.gdal",
+        "filename": output_folder+"building.tif",
+        "dimension": "Z",
+        "output_type": "max",
+        "resolution": 0.2
+    }
+]
+
+        with open("tmp/p_building.json", "w") as f: json.dump(data, f, indent=3)
+        run_command(["pdal", "pipeline", "tmp/p_building.json"])
+
 
     #print("building slope")
     #run_command(["gdaldem", "slope", output_folder+"dsm_building.tif", output_folder+"slope_building.tif", "-s", "1"])
