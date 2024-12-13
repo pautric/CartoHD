@@ -3,21 +3,15 @@ import os
 import json
 
 
-'''
-test ambient oclusion - only for buildings
-contour labels
-test https://www.shadedrelief.com/texture_shading/
+input_lidar_data = "/home/juju/geodata/lidar/washington/*.laz"
+output_folder = "/home/juju/lidar_mapping/washington/"
 
-'''
 
 process_dsm = True
 process_dtm = True
 process_vegetation = True
 process_building = True
 with_pdal_pipeline = True
-
-input_lidar_data = "/home/juju/geodata/lidar/tour_eiffel.laz"
-output_folder = "/home/juju/lidar_mapping/eiffel/"
 
 
 #create necessary folders
