@@ -17,7 +17,7 @@ process_building = True
 with_pdal_pipeline = True
 
 input_lidar_data = "/home/juju/geodata/lidar/tour_eiffel.laz"
-output_folder = "/home/juju/lidar_mapping/eiffel"
+output_folder = "/home/juju/lidar_mapping/eiffel/"
 
 
 #create necessary folders
