@@ -8,6 +8,7 @@ output_folder = "/home/juju/lidar_mapping/vianden/"
 #xmin xmax ymin ymax
 bounds = False #"([1308299, 1311449],[444238, 446427])"
 
+#https://www.youtube.com/watch?v=ZcU6N2D0ZaI
 
 process_dsm = True
 process_dtm = True
