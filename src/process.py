@@ -21,7 +21,8 @@ os.makedirs("tmp/", exist_ok=True)
 # ensure pdal command is available through conda install
 #if with_pdal_pipeline: run_command(["conda", "activate", "pdal"])
 
-bounds = "([1308299, 1311449],[444238, 446427])"
+#xmin xmax ymin ymax
+bounds = ([1308299, 1311449],[444238, 446427])
 
 if process_dsm:
 
