@@ -5,6 +5,8 @@ import json
 
 input_lidar_data = "/home/juju/geodata/lidar/washington/*.laz"
 output_folder = "/home/juju/lidar_mapping/washington/"
+#xmin xmax ymin ymax
+bounds = "([1308299, 1311449],[444238, 446427])"
 
 
 process_dsm = True
@@ -21,23 +23,29 @@ os.makedirs("tmp/", exist_ok=True)
 # ensure pdal command is available through conda install
 #if with_pdal_pipeline: run_command(["conda", "activate", "pdal"])
 
-#xmin xmax ymin ymax
-bounds = ([1308299, 1311449],[444238, 446427])
+
+
+def get_base_config():
+    data = [
+  {
+    "type": "readers.las",
+    "filename": input_lidar_data
+  }]
+    if bounds: data.append({
+        "type": "filters.crop",
+        "bounds": bounds
+    })
+    return data
+
 
 if process_dsm:
 
     if with_pdal_pipeline:
         print("pipeline DSM")
 
-        data = [
-  {
-    "type": "readers.las",
-    "filename": input_lidar_data
-  },
-    {
-        "type": "filters.crop",
-        "bounds": bounds
-    },
+        data = get_base_config()
+        data.extend(
+    [
   {
     "limits": "Classification![7:7]",
     "type": "filters.range",
@@ -53,7 +61,7 @@ if process_dsm:
     "resolution": 0.2,
     "output_type": "max"
   }
-]
+])
 
         with open("tmp/p_dsm.json", "w") as f: json.dump(data, f, indent=3)
 
@@ -80,15 +88,8 @@ if process_dtm:
     if with_pdal_pipeline:
         print("pipeline DTM")
 
-        data = [
-  {
-    "type": "readers.las",
-    "filename": input_lidar_data
-  },
-    {
-        "type": "filters.crop",
-        "bounds": bounds
-    },
+        data = get_base_config()
+        data.extend([
   {
     "type": "filters.range",
     "limits": "Classification[2:2]"
@@ -103,7 +104,7 @@ if process_dtm:
     "resolution": 0.2,
     "output_type": "min"
   }
-]
+])
 
         with open("tmp/p_dtm.json", "w") as f: json.dump(data, f, indent=3)
 
@@ -133,15 +134,8 @@ if process_vegetation:
     if with_pdal_pipeline:
         print("pipeline vegetation")
 
-        data = [
-    {
-        "type": "readers.las",
-        "filename": input_lidar_data
-    },
-    {
-        "type": "filters.crop",
-        "bounds": bounds
-    },
+        data = get_base_config()
+        data.extend([
     {
         "type": "filters.range",
         "limits": "Classification[3:5]"
@@ -167,7 +161,7 @@ if process_vegetation:
         "output_type": "max",
         "resolution": 0.2
     }
-]
+])
 
         with open("tmp/p_vegetation.json", "w") as f: json.dump(data, f, indent=3)
         run_command(["pdal", "pipeline", "tmp/p_vegetation.json"])
@@ -186,15 +180,8 @@ if process_building:
     if with_pdal_pipeline:
         print("pipeline building")
 
-        data = [
-    {
-        "type": "readers.las",
-        "filename": input_lidar_data
-    },
-    {
-        "type": "filters.crop",
-        "bounds": bounds
-    },
+        data = get_base_config()
+        data.extend([
     {
         "type": "filters.range",
         "limits": "Classification[6:6]"
@@ -220,7 +207,7 @@ if process_building:
         "output_type": "max",
         "resolution": 0.2
     }
-]
+])
 
         with open("tmp/p_building.json", "w") as f: json.dump(data, f, indent=3)
         run_command(["pdal", "pipeline", "tmp/p_building.json"])
