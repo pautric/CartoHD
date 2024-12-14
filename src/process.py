@@ -6,7 +6,7 @@ import json
 input_lidar_data = "/home/juju/geodata/lidar/washington/*.laz"
 output_folder = "/home/juju/lidar_mapping/washington/"
 #xmin xmax ymin ymax
-bounds = "([1308299, 1311449],[444238, 446427])"
+bounds = False #"([1308299, 1311449],[444238, 446427])"
 
 
 process_dsm = True
