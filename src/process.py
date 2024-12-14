@@ -21,6 +21,10 @@ os.makedirs("tmp/", exist_ok=True)
 # ensure pdal command is available through conda install
 #if with_pdal_pipeline: run_command(["conda", "activate", "pdal"])
 
+#1295877  442633
+#1313243  450055
+#bounds = "([1314070, 1315070],[447477, 448477])"
+
 if process_dsm:
 
     if with_pdal_pipeline:
@@ -31,6 +35,10 @@ if process_dsm:
     "type": "readers.las",
     "filename": input_lidar_data
   },
+    #{
+    #    "type": "filters.crop",
+    #    "bounds": bounds
+    #},
   {
     "limits": "Classification![7:7]",
     "type": "filters.range",
