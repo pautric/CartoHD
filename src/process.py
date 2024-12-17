@@ -91,6 +91,17 @@ if process_dtm:
 
         data = get_base_config()
         data.extend([
+
+  {
+    "type": "filters.range",
+    "limits": "Classification[2:2],Classification[6:6]"
+  },
+  {
+    "type": "writers.gdal",
+    "filename": output_folder+"dtm_building.tif",
+    "resolution": 0.2,
+    "output_type": "min"
+  },
   {
     "type": "filters.range",
     "limits": "Classification[2:2]"
@@ -114,6 +125,9 @@ if process_dtm:
 
     print("dtm slope")
     run_command(["gdaldem", "slope", output_folder+"dtm_raw.tif", output_folder+"slope_dtm.tif", "-s", "1"])
+
+    print("dtm building slope")
+    run_command(["gdaldem", "slope", output_folder+"dtm_building.tif", output_folder+"slope_dtm_building.tif", "-s", "1"])
 
     print("fill dtm no data")
     run_command(["gdal_fillnodata.py", "-md", "50", "-of", "GTiff", output_folder+"dtm_raw.tif", output_folder+"dtm.tif"])
