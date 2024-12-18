@@ -3,8 +3,8 @@ import os
 import json
 
 
-input_lidar_data = "/home/juju/geodata/lidar/pavin/*.laz"
-output_folder = "/home/juju/lidar_mapping/pavin/"
+input_lidar_data = "/home/juju/geodata/lidar/besancon/*.laz"
+output_folder = "/home/juju/lidar_mapping/besancon/"
 #xmin xmax ymin ymax
 bounds = False
 
