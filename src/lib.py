@@ -1,4 +1,5 @@
-from math import ceil, hypot, pi
+import math
+from math import ceil, hypot, floor
 import subprocess
 import numpy as np
 import rasterio
@@ -167,7 +168,7 @@ def contour_type_field(input_file, layer_name, output_file=None):
 
 
 
-def compute_rayshading(input_file: str, output_file: str, light_azimuth: float = 315, light_altitude: float = 30, max: int = 1000, jump: int = 1):
+def compute_rayshading(input_file: str, output_file: str, light_azimuth: float = 315, light_altitude: float = 30, ray_max_length: int = 1000, jump: int = 1):
     """
     Compute rayshading for a DEM using a ray-casting algorithm.
 
@@ -193,19 +194,18 @@ def compute_rayshading(input_file: str, output_file: str, light_azimuth: float =
     # Get dimensions
     rows, cols = dem.shape
 
-    # Convert light direction to radians
-    azimuth_rad = (90 - light_azimuth + 180)*pi/180
-    altitude_rad = light_altitude*pi/180
-
-    # Calculate light direction vector
-    dx = jump * np.cos(azimuth_rad)  # Light movement in x direction
-    dy = jump * np.sin(azimuth_rad)  # Light movement in y direction
-    dz = - jump * np.tan(altitude_rad)  # Light movement in height
-
     # Initialize output array
     #rayshaded = np.ones_like(dem, dtype=np.uint8)
     no_data_value = 0
     rayshaded = np.full((rows, cols), no_data_value, dtype=np.uint16)
+
+
+    # Calculate light direction vector
+    azimuth_rad = (90 - light_azimuth + 180)*math.pi/180
+    dx = jump * math.cos(azimuth_rad)
+    dy = jump * math.sin(azimuth_rad)
+    altitude_rad = light_altitude*math.pi/180
+    dz = - jump * math.tan(altitude_rad)
 
     # go through each pixel. From each one, make a ray and shade cells under until ray is stopped
     for row in range(rows):
@@ -227,9 +227,9 @@ def compute_rayshading(input_file: str, output_file: str, light_azimuth: float =
 
                 # compute ray length
                 ray_length = hypot(x-x0, y-y0, z-z0)
-                if ray_length > max: break
+                if ray_length > ray_max_length: break
 
-                col_, row_ = int(np.floor(x)), int(np.floor(y))
+                col_, row_ = int(floor(x)), int(floor(y))
 
                 # ray has reached image bounds: break
                 if not (0 <= col_ < cols and 0 <= row_ < rows): break
@@ -267,7 +267,7 @@ def compute_rayshading(input_file: str, output_file: str, light_azimuth: float =
     return rayshaded
 
 
-compute_rayshading("/home/juju/lidar_mapping/strasbourg_cathedrale/dsm.tif", "/home/juju/lidar_mapping/strasbourg_cathedrale/shadow_2.tiff", light_azimuth=315, jump=3)
+compute_rayshading("/home/juju/lidar_mapping/strasbourg_cathedrale/dsm.tif", "/home/juju/lidar_mapping/strasbourg_cathedrale/shadow_2.tiff")
 
 
 
