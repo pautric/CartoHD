@@ -271,7 +271,7 @@ def compute_rayshading(input_file: str, output_file: str, light_azimuth: float =
     return rayshaded
 
 
-compute_rayshading("/home/juju/lidar_mapping/ensg/dsm.tif", "/home/Bureau/shadow.tiff")
+compute_rayshading("/home/juju/lidar_mapping/ensg/dsm.tif", "/home/juju/lidar_mapping/ensg/shadow_2.tiff")
 
 
 
