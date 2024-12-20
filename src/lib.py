@@ -1,4 +1,4 @@
-from math import hypot
+from math import hypot,pi
 import subprocess
 import numpy as np
 import rasterio
@@ -168,7 +168,7 @@ def contour_type_field(input_file, layer_name, output_file=None):
 
 
 
-def compute_rayshading(input_file: str, output_file: str, light_azimuth: float = 315, light_altitude: float = 50, max: int = 100, jump: int = 10):
+def compute_rayshading(input_file: str, output_file: str, light_azimuth: float = 315, light_altitude: float = 30, max: int = 1000, jump: int = 1):
     """
     Compute rayshading for a DEM using a ray-casting algorithm.
 
@@ -188,38 +188,27 @@ def compute_rayshading(input_file: str, output_file: str, light_azimuth: float =
     rayshaded : np.ndarray
         The computed rayshaded image (0=shadow, 1=illuminated).
     """
-    with rasterio.open(input_file) as src:
-        dem = src.read(1)  # Read DEM data
-        #transform = src.transform  # Geospatial transform
-        #pixel_size_x = transform[0]
-        #pixel_size_y = -transform[4]
 
-    # Dimensions of the DEM
+    # Read input DEM
+    with rasterio.open(input_file) as src: dem = src.read(1)
+    # Get dimensions
     rows, cols = dem.shape
 
     # Convert light direction to radians
-    azimuth_rad = np.radians(light_azimuth + 180)
-    altitude_rad = np.radians(light_altitude)
+    azimuth_rad = (90 - light_azimuth + 180)*pi/180
+    altitude_rad = light_altitude*pi/180
 
     # Calculate light direction vector
     dx = jump * np.sin(azimuth_rad)  # Light movement in x direction
     dy = jump * np.cos(azimuth_rad)  # Light movement in y direction
     dz = - jump * np.tan(altitude_rad)  # Light movement in height
 
-    # Normalize light direction for stepping
-    #step_size = max(abs(dx), abs(dy))  # Ensure consistent stepping
-    #dx /= step_size
-    #dy /= step_size
-
     # Initialize output array
     #rayshaded = np.ones_like(dem, dtype=np.uint8)
     no_data_value = -9999
     rayshaded = np.full((rows, cols), no_data_value, dtype=np.int32)
 
-    #print(rows, cols)
-    #print(dx, dy, dz)
-
-    # Ray-casting algorithm
+    # go through each pixel. From each one, make a ray and shade cells under until ray is stopped
     for row in range(rows):
         print(row, "/", rows)
         for col in range(cols):
@@ -235,18 +224,26 @@ def compute_rayshading(input_file: str, output_file: str, light_azimuth: float =
                 y += dy
                 z += dz
 
-                distance = hypot(x-x0,y-y0,z-z0)
+                distance = hypot(x-x0, y-y0, z-z0)
                 if distance > max: break
 
                 col_, row_ = int(np.floor(x)), int(np.floor(y))
 
-                if 0 <= col_ < cols and 0 <= row_ < rows:
-                    # if ray was blocked, break
-                    elevation = dem[row_, col_]
-                    if elevation > z: break
+                # ray has reached image bounds: break
+                if not (0 <= col_ < cols and 0 <= row_ < rows): break
 
-                    # apply shade
-                    rayshaded[row_, col_] = int(distance) #improve - take min
+                # if ray was blocked, break
+                elevation = dem[row_, col_]
+                if elevation > z: break
+
+                # get current shade value
+                shade = rayshaded[row_, col_]
+
+                # if no shade, set distance
+                if shade == no_data_value: rayshaded[row_, col_] = int(distance)
+                # else set min distance
+                else: rayshaded[row_, col_] = min(int(distance), shade)
+
 
     # Save rayshaded result as GeoTIFF
     with rasterio.open(
@@ -256,7 +253,7 @@ def compute_rayshading(input_file: str, output_file: str, light_azimuth: float =
         height=rayshaded.shape[0],
         width=rayshaded.shape[1],
         count=1,
-        dtype='uint8',
+        dtype='uint32',
         crs=src.crs,
         transform=src.transform,
     ) as dst:
@@ -266,7 +263,7 @@ def compute_rayshading(input_file: str, output_file: str, light_azimuth: float =
     return rayshaded
 
 
-compute_rayshading("/home/juju/lidar_mapping/ensg/dsm.tif", "/home/juju/lidar_mapping/ensg/shadow_2.tiff")
+compute_rayshading("/home/juju/lidar_mapping/strasbourg_cathedrale/dsm.tif", "/home/juju/lidar_mapping/strasbourg_cathedrale/shadow_2.tiff", light_azimuth=0, jump=10)
 
 
 
