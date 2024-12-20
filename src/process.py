@@ -3,8 +3,8 @@ import os
 import json
 
 
-input_lidar_data = "/home/juju/geodata/lidar/besancon/*.laz"
-output_folder = "/home/juju/lidar_mapping/besancon/"
+input_lidar_data = "/home/juju/geodata/lidar/arcon/*.laz"
+output_folder = "/home/juju/lidar_mapping/arcon/"
 #xmin xmax ymin ymax
 bounds = False
 
@@ -243,4 +243,8 @@ if process_building:
     print("simplify")
     run_command(["ogr2ogr", "-f", "GPKG", "-overwrite", output_folder+"building_simplified.gpkg", output_folder+"building.gpkg", "-simplify", "0.5"])
     os.remove(output_folder+"building.gpkg")
+
+
+#TODO
+#processing.run("terrain_shading:Shadow depth", {'INPUT':'/tmp/processing_RHeEYq/7b63e916c7dc48d1aeb658a89ca78558/OUTPUT.tif','DIRECTION':315,'ANGLE':10,'SMOOTH':True,'OUTPUT':'TEMPORARY_OUTPUT'})
 

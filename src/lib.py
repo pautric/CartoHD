@@ -168,7 +168,7 @@ def contour_type_field(input_file, layer_name, output_file=None):
 
 
 
-def compute_rayshading(input_file: str, output_file: str, light_azimuth: float = 315, light_altitude: float = 30, max: int = 100, jump: int = 10):
+def compute_rayshading(input_file: str, output_file: str, light_azimuth: float = 315, light_altitude: float = 50, max: int = 100, jump: int = 10):
     """
     Compute rayshading for a DEM using a ray-casting algorithm.
 
@@ -198,13 +198,13 @@ def compute_rayshading(input_file: str, output_file: str, light_azimuth: float =
     rows, cols = dem.shape
 
     # Convert light direction to radians
-    azimuth_rad = np.radians(light_azimuth)
+    azimuth_rad = np.radians(light_azimuth + 180)
     altitude_rad = np.radians(light_altitude)
 
     # Calculate light direction vector
     dx = jump * np.sin(azimuth_rad)  # Light movement in x direction
     dy = jump * np.cos(azimuth_rad)  # Light movement in y direction
-    dz = jump * np.tan(altitude_rad)  # Light movement in height
+    dz = - jump * np.tan(altitude_rad)  # Light movement in height
 
     # Normalize light direction for stepping
     #step_size = max(abs(dx), abs(dy))  # Ensure consistent stepping
@@ -224,7 +224,6 @@ def compute_rayshading(input_file: str, output_file: str, light_azimuth: float =
         print(row, "/", rows)
         for col in range(cols):
             z0 = dem[row, col]
-            shadow = no_data_value
 
             #print(row, col, z0)
 
@@ -246,14 +245,13 @@ def compute_rayshading(input_file: str, output_file: str, light_azimuth: float =
                 #x_ceil, y_ceil = int(np.ceil(x)), int(np.ceil(y))
 
                 if 0 <= x_floor < cols and 0 <= y_floor < rows:
-                    elevation = dem[y_floor, x_floor]  # Approximation (nearest neighbor)
+                    # Approximation (nearest neighbor)
+                    elevation = dem[y_floor, x_floor]
 
-                    # Check if this pixel blocks the current pixel
-                    if elevation > z:
-                        shadow = int(distance)
-                        break
+                    # Check if ray was blocked
+                    if elevation > z: break
 
-            rayshaded[row, col] = shadow
+                    rayshaded[x_floor, y_floor] = int(distance) #improve
 
     # Save rayshaded result as GeoTIFF
     with rasterio.open(
@@ -273,6 +271,9 @@ def compute_rayshading(input_file: str, output_file: str, light_azimuth: float =
     return rayshaded
 
 
-# Example usage
+compute_rayshading("/home/juju/lidar_mapping/ensg/dsm.tif", "/home/Bureau/shadow.tiff")
+
+
+
 #compute_rayshading('/home/juju/Bureau/dsm.tif', '/home/juju/Bureau/shadow.tif', light_azimuth=315, light_altitude=30)
 
