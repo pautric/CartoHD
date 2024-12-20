@@ -223,8 +223,9 @@ def compute_rayshading(input_file: str, output_file: str, light_azimuth: float =
                 y += dy
                 z += dz
 
-                distance = hypot(x-x0, y-y0, z-z0)
-                if distance > max: break
+                # compute ray length
+                ray_length = hypot(x-x0, y-y0, z-z0)
+                if ray_length > max: break
 
                 col_, row_ = int(np.floor(x)), int(np.floor(y))
 
@@ -239,10 +240,9 @@ def compute_rayshading(input_file: str, output_file: str, light_azimuth: float =
                 shade = rayshaded[row_, col_]
 
                 # if no shade, set distance
-                if shade == no_data_value: rayshaded[row_, col_] = int(distance)
+                if shade == no_data_value: rayshaded[row_, col_] = int(ray_length)
                 # else set min distance
-                else: rayshaded[row_, col_] = min(int(distance), shade)
-
+                else: rayshaded[row_, col_] = min(int(ray_length), shade)
 
     # Save rayshaded result as GeoTIFF
     with rasterio.open(
@@ -253,6 +253,7 @@ def compute_rayshading(input_file: str, output_file: str, light_azimuth: float =
         width=rayshaded.shape[1],
         count=1,
         dtype='uint16',
+        nodata=no_data_value,
         crs=src.crs,
         transform=src.transform,
     ) as dst:
