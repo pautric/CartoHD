@@ -198,8 +198,8 @@ def compute_rayshading(input_file: str, output_file: str, light_azimuth: float =
     altitude_rad = light_altitude*pi/180
 
     # Calculate light direction vector
-    dx = jump * np.sin(azimuth_rad)  # Light movement in x direction
-    dy = jump * np.cos(azimuth_rad)  # Light movement in y direction
+    dx = jump * np.cos(azimuth_rad)  # Light movement in x direction
+    dy = jump * np.sin(azimuth_rad)  # Light movement in y direction
     dz = - jump * np.tan(altitude_rad)  # Light movement in height
 
     # Initialize output array
@@ -267,7 +267,7 @@ def compute_rayshading(input_file: str, output_file: str, light_azimuth: float =
     return rayshaded
 
 
-compute_rayshading("/home/juju/lidar_mapping/strasbourg_cathedrale/dsm.tif", "/home/juju/lidar_mapping/strasbourg_cathedrale/shadow_2.tiff", light_azimuth=315, jump=10)
+compute_rayshading("/home/juju/lidar_mapping/strasbourg_cathedrale/dsm.tif", "/home/juju/lidar_mapping/strasbourg_cathedrale/shadow_2.tiff", light_azimuth=315, jump=3)
 
 
 
