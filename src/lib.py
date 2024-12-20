@@ -216,6 +216,8 @@ def compute_rayshading(input_file: str, output_file: str, light_azimuth: float =
             x0, y0 = col + 0.5, row + 0.5
             z0 = dem[row, col]
 
+            if z0 == src.nodata: continue
+
             # project ray
             x,y,z = x0,y0,z0
             while 0 <= x < cols and 0 <= y < rows:
@@ -234,6 +236,7 @@ def compute_rayshading(input_file: str, output_file: str, light_azimuth: float =
 
                 # if ray was blocked, break
                 elevation = dem[row_, col_]
+                if elevation == src.nodata: continue
                 if elevation > z: break
 
                 # get current shade value
