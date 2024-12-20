@@ -168,7 +168,7 @@ def contour_type_field(input_file, layer_name, output_file=None):
 
 
 
-def compute_rayshading(input_file: str, output_file: str, light_azimuth: float = 315, light_altitude: float = 30, ray_max_length: int = 1000, jump: int = 1):
+def compute_rayshading(input_file: str, output_file: str, light_azimuth: float = 315, light_altitude: float = 30, ray_max_length: int = None, jump: int = 1):
     """
     Compute rayshading for a DEM using a ray-casting algorithm.
 
@@ -205,7 +205,7 @@ def compute_rayshading(input_file: str, output_file: str, light_azimuth: float =
     dx = jump * math.cos(azimuth_rad)
     dy = jump * math.sin(azimuth_rad)
     altitude_rad = light_altitude*math.pi/180
-    dz = - jump * math.tan(altitude_rad)
+    dz = jump * math.tan(altitude_rad)
 
     # go through each pixel. From each one, make a ray and shade cells under until ray is stopped
     for row in range(rows):
@@ -222,12 +222,12 @@ def compute_rayshading(input_file: str, output_file: str, light_azimuth: float =
             x,y,z = x0,y0,z0
             while 0 <= x < cols and 0 <= y < rows:
                 x += dx
-                y += dy
-                z += dz
+                y -= dy
+                z -= dz
 
                 # compute ray length
                 ray_length = hypot(x-x0, y-y0, z-z0)
-                if ray_length > ray_max_length: break
+                if ray_max_length != None and ray_length > ray_max_length: break
 
                 col_, row_ = int(floor(x)), int(floor(y))
 
@@ -267,7 +267,8 @@ def compute_rayshading(input_file: str, output_file: str, light_azimuth: float =
     return rayshaded
 
 
-compute_rayshading("/home/juju/lidar_mapping/strasbourg_cathedrale/dsm.tif", "/home/juju/lidar_mapping/strasbourg_cathedrale/shadow_2.tiff")
+#compute_rayshading("/home/juju/lidar_mapping/strasbourg_cathedrale/dsm.tif", "/home/juju/lidar_mapping/strasbourg_cathedrale/shadow_2.tif")
+compute_rayshading("/home/juju/lidar_mapping/marseille_centre/dsm.tif", "/home/juju/lidar_mapping/marseille_centre/shadow.tif")
 
 
 

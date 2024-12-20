@@ -1,4 +1,4 @@
-from lib import run_command, sequential_buffer_tiff, smooth, contour_type_field
+from lib import run_command, sequential_buffer_tiff, smooth, contour_type_field, compute_rayshading
 import os
 import json
 
@@ -15,6 +15,7 @@ process_dtm = True
 process_vegetation = True
 process_building = True
 with_pdal_pipeline = True
+compute_dsm_rayshading = True
 
 
 #create necessary folders
@@ -243,6 +244,13 @@ if process_building:
     print("simplify")
     run_command(["ogr2ogr", "-f", "GPKG", "-overwrite", output_folder+"building_simplified.gpkg", output_folder+"building.gpkg", "-simplify", "0.5"])
     os.remove(output_folder+"building.gpkg")
+
+
+
+if compute_dsm_rayshading:
+    print("ray shading")
+
+    compute_rayshading(output_folder+"dsm.tif", output_folder+"shadow.tif")
 
 
 #TODO
