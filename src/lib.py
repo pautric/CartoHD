@@ -1,4 +1,4 @@
-from math import hypot,pi
+from math import ceil, hypot, pi
 import subprocess
 import numpy as np
 import rasterio
@@ -204,8 +204,8 @@ def compute_rayshading(input_file: str, output_file: str, light_azimuth: float =
 
     # Initialize output array
     #rayshaded = np.ones_like(dem, dtype=np.uint8)
-    no_data_value = -9999
-    rayshaded = np.full((rows, cols), no_data_value, dtype=np.int16)
+    no_data_value = 0
+    rayshaded = np.full((rows, cols), no_data_value, dtype=np.uint16)
 
     # go through each pixel. From each one, make a ray and shade cells under until ray is stopped
     for row in range(rows):
@@ -238,11 +238,12 @@ def compute_rayshading(input_file: str, output_file: str, light_azimuth: float =
 
                 # get current shade value
                 shade = rayshaded[row_, col_]
+                ray_length = int(ceil(ray_length))
 
                 # if no shade, set distance
-                if shade == no_data_value: rayshaded[row_, col_] = int(ray_length)
+                if shade == no_data_value: rayshaded[row_, col_] = ray_length
                 # else set min distance
-                else: rayshaded[row_, col_] = min(int(ray_length), shade)
+                else: rayshaded[row_, col_] = min(ray_length, shade)
 
     # Save rayshaded result as GeoTIFF
     with rasterio.open(
