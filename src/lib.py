@@ -4,7 +4,6 @@ import numpy as np
 import rasterio
 import geopandas as gpd
 from scipy.ndimage import binary_dilation, gaussian_filter, binary_erosion, convolve
-from rasterio.transform import from_origin
 
 
 
@@ -206,11 +205,11 @@ def compute_rayshading(input_file: str, output_file: str, light_azimuth: float =
     # Initialize output array
     #rayshaded = np.ones_like(dem, dtype=np.uint8)
     no_data_value = -9999
-    rayshaded = np.full((rows, cols), no_data_value, dtype=np.int32)
+    rayshaded = np.full((rows, cols), no_data_value, dtype=np.int16)
 
     # go through each pixel. From each one, make a ray and shade cells under until ray is stopped
     for row in range(rows):
-        print(row, "/", rows)
+        print(row, "/", (rows-1))
         for col in range(cols):
 
             #ray origin point
@@ -253,7 +252,7 @@ def compute_rayshading(input_file: str, output_file: str, light_azimuth: float =
         height=rayshaded.shape[0],
         width=rayshaded.shape[1],
         count=1,
-        dtype='uint32',
+        dtype='uint16',
         crs=src.crs,
         transform=src.transform,
     ) as dst:
@@ -263,7 +262,7 @@ def compute_rayshading(input_file: str, output_file: str, light_azimuth: float =
     return rayshaded
 
 
-compute_rayshading("/home/juju/lidar_mapping/strasbourg_cathedrale/dsm.tif", "/home/juju/lidar_mapping/strasbourg_cathedrale/shadow_2.tiff", light_azimuth=0, jump=10)
+compute_rayshading("/home/juju/lidar_mapping/strasbourg_cathedrale/dsm.tif", "/home/juju/lidar_mapping/strasbourg_cathedrale/shadow_2.tiff", light_azimuth=315, jump=10)
 
 
 
