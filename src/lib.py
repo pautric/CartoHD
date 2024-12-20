@@ -223,15 +223,13 @@ def compute_rayshading(input_file: str, output_file: str, light_azimuth: float =
     for row in range(rows):
         print(row, "/", rows)
         for col in range(cols):
+
+            #ray origin point
+            x0, y0 = col + 0.5, row + 0.5
             z0 = dem[row, col]
 
-            #print(row, col, z0)
-
-            # Step along the ray direction
-            x0, y0 = col + 0.5, row + 0.5  # Start at the center of the current pixel
-            x,y,z = x0,y0,z0
-
             # project ray
+            x,y,z = x0,y0,z0
             while 0 <= x < cols and 0 <= y < rows:
                 x += dx
                 y += dy
@@ -240,18 +238,15 @@ def compute_rayshading(input_file: str, output_file: str, light_azimuth: float =
                 distance = hypot(x-x0,y-y0,z-z0)
                 if distance > max: break
 
-                # Get the elevation of the pixel at (x, y) using bilinear interpolation
-                x_floor, y_floor = int(np.floor(x)), int(np.floor(y))
-                #x_ceil, y_ceil = int(np.ceil(x)), int(np.ceil(y))
+                col_, row_ = int(np.floor(x)), int(np.floor(y))
 
-                if 0 <= x_floor < cols and 0 <= y_floor < rows:
-                    # Approximation (nearest neighbor)
-                    elevation = dem[y_floor, x_floor]
-
-                    # Check if ray was blocked
+                if 0 <= col_ < cols and 0 <= row_ < rows:
+                    # if ray was blocked, break
+                    elevation = dem[row_, col_]
                     if elevation > z: break
 
-                    rayshaded[x_floor, y_floor] = int(distance) #improve
+                    # apply shade
+                    rayshaded[row_, col_] = int(distance) #improve - take min
 
     # Save rayshaded result as GeoTIFF
     with rasterio.open(
