@@ -168,7 +168,7 @@ def contour_type_field(input_file, layer_name, output_file=None):
 
 
 
-def compute_rayshading(input_file: str, output_file: str, light_azimuth: float = 315, light_altitude: float = 30, ray_max_length: int = None, jump: int = 1):
+def compute_rayshading(input_file: str, output_file: str, light_azimuth: float = 315, light_altitude: float = 30, ray_max_length: int = None, jump: int = 1, show_progress: bool = False):
     """
     Compute rayshading for a DEM using a ray-casting algorithm.
 
@@ -209,7 +209,7 @@ def compute_rayshading(input_file: str, output_file: str, light_azimuth: float =
 
     # go through each pixel. From each one, make a ray and shade cells under until ray is stopped
     for row in range(rows):
-        print(row, "/", (rows-1))
+        if show_progress: print(row, "/", (rows-1))
         for col in range(cols):
 
             #ray origin point
