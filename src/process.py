@@ -3,7 +3,7 @@ import os
 import json
 
 
-f = "hauterives"
+f = "heron"
 input_lidar_data = "/home/juju/geodata/lidar/"+f+"/*.laz"
 output_folder = "/home/juju/lidar_mapping/"+f+"/"
 #xmin xmax ymin ymax
