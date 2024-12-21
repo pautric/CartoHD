@@ -7,7 +7,8 @@ f = "heron"
 input_lidar_data = "/home/juju/geodata/lidar/"+f+"/*.laz"
 output_folder = "/home/juju/lidar_mapping/"+f+"/"
 #xmin xmax ymin ymax
-bounds = False
+#"([0,1000000],[0,1000000])"
+bounds = "([700866, 637307],[702252, 638749])"
 
 #https://www.youtube.com/watch?v=ZcU6N2D0ZaI
 
