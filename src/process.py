@@ -4,20 +4,23 @@ import json
 
 
 f = "heron"
+caseBE = True
 input_lidar_data = "/home/juju/geodata/lidar/"+f+"/*.laz"
 output_folder = "/home/juju/lidar_mapping/"+f+"/"
 #xmin xmax ymin ymax
 #"([0,1000000],[0,1000000])"
 bounds = "([699000, 703000],[636000, 639000])"
-caseBE = True
+
+codeBuilding = "1" if caseBE else "6"
+
 
 #https://www.youtube.com/watch?v=ZcU6N2D0ZaI
 
-process_dsm = True
+process_dsm = False
 process_dtm = True
-process_vegetation = True
-process_building = True
-compute_dsm_rayshading = True
+process_vegetation = False
+process_building = False
+compute_dsm_rayshading = False
 with_pdal_pipeline = True
 
 
@@ -98,7 +101,7 @@ if process_dtm:
 
   {
     "type": "filters.range",
-    "limits": "Classification[2:2],Classification[6:6]"
+    "limits": "Classification[2:2],Classification["+codeBuilding+":"+codeBuilding+"]"
   },
   {
     "type": "writers.gdal",
@@ -198,8 +201,6 @@ if process_building:
 
     if with_pdal_pipeline:
         print("pipeline building")
-
-        codeBuilding = "1" if caseBE else "6"
 
         data = get_base_config()
         data.extend([
