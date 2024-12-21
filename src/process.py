@@ -3,8 +3,9 @@ import os
 import json
 
 
-input_lidar_data = "/home/juju/geodata/lidar/arcon/*.laz"
-output_folder = "/home/juju/lidar_mapping/arcon/"
+f = "hauterives"
+input_lidar_data = "/home/juju/geodata/lidar/"+f+"/*.laz"
+output_folder = "/home/juju/lidar_mapping/"+f+"/"
 #xmin xmax ymin ymax
 bounds = False
 

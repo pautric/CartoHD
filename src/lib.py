@@ -268,7 +268,7 @@ def compute_rayshading(input_file: str, output_file: str, light_azimuth: float =
 
 
 #compute_rayshading("/home/juju/lidar_mapping/strasbourg_cathedrale/dsm.tif", "/home/juju/lidar_mapping/strasbourg_cathedrale/shadow_2.tif")
-compute_rayshading("/home/juju/lidar_mapping/marseille_centre/dsm.tif", "/home/juju/lidar_mapping/marseille_centre/shadow.tif")
+#compute_rayshading("/home/juju/lidar_mapping/marseille_centre/dsm.tif", "/home/juju/lidar_mapping/marseille_centre/shadow.tif")
 
 
 
