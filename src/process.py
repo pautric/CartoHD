@@ -8,7 +8,8 @@ input_lidar_data = "/home/juju/geodata/lidar/"+f+"/*.laz"
 output_folder = "/home/juju/lidar_mapping/"+f+"/"
 #xmin xmax ymin ymax
 #"([0,1000000],[0,1000000])"
-bounds = "([700866, 702252],[637307, 638749])"
+bounds = "([699000, 703000],[636000, 639000])"
+caseBE = True
 
 #https://www.youtube.com/watch?v=ZcU6N2D0ZaI
 
@@ -16,8 +17,8 @@ process_dsm = True
 process_dtm = True
 process_vegetation = True
 process_building = True
-with_pdal_pipeline = True
 compute_dsm_rayshading = True
+with_pdal_pipeline = True
 
 
 #create necessary folders
@@ -198,11 +199,13 @@ if process_building:
     if with_pdal_pipeline:
         print("pipeline building")
 
+        codeBuilding = "1" if caseBE else "6"
+
         data = get_base_config()
         data.extend([
     {
         "type": "filters.range",
-        "limits": "Classification[6:6]"
+        "limits": "Classification["+codeBuilding+":"+codeBuilding+"]"
     },
     {
         "type": "filters.ferry",
