@@ -34,6 +34,7 @@ os.makedirs("tmp/", exist_ok=True)
 
 
 def get_base_config():
+    # create base pdal config, to be completed for various cases
     data = [
   {
     "type": "readers.las",
@@ -46,23 +47,30 @@ def get_base_config():
     return data
 
 
+
+
 if process_dsm:
 
     if with_pdal_pipeline:
+# prepare PDAL pipeline config
         print("pipeline DSM")
 
         data = get_base_config()
         data.extend(
     [
+        # remove noise
   {
     "limits": "Classification![7:7]",
     "type": "filters.range",
     "tag": "nonoise"
   },
+    #TODO: remove outlier points ?
+  # keep elevation value
   {
     "type": "filters.ferry",
     "dimensions": "Z=>elevation"
   },
+  # max value for each 20cm pixel
   {
     "type": "writers.gdal",
     "filename": output_folder+"dsm_raw.tif",
@@ -71,11 +79,9 @@ if process_dsm:
   }
 ])
 
+# execute PDAL pipeline
         with open("tmp/p_dsm.json", "w") as f: json.dump(data, f, indent=3)
-
         run_command(["pdal", "pipeline", "tmp/p_dsm.json"])
-
-    #TODO: remove outliers
 
     print("fill dsm no data")
     #TODO: should not be linear
@@ -89,11 +95,11 @@ if process_dsm:
     print("dsm slope")
     run_command(["gdaldem", "slope", output_folder+"dsm.tif", output_folder+"slope_dsm.tif", "-s", "1"])
 
-    #TODO: make shadow depth
 
 if process_dtm:
 
     if with_pdal_pipeline:
+# prepare PDAL pipeline config
         print("pipeline DTM")
 
         data = get_base_config()
@@ -125,8 +131,8 @@ if process_dtm:
   }
 ])
 
+# execute PDAL pipeline
         with open("tmp/p_dtm.json", "w") as f: json.dump(data, f, indent=3)
-
         run_command(["pdal", "pipeline", "tmp/p_dtm.json"])
 
 
@@ -154,6 +160,7 @@ if process_dtm:
 if process_vegetation:
 
     if with_pdal_pipeline:
+# prepare PDAL pipeline config
         print("pipeline vegetation")
 
         data = get_base_config()
@@ -185,6 +192,7 @@ if process_vegetation:
     }
 ])
 
+# execute PDAL pipeline
         with open("tmp/p_vegetation.json", "w") as f: json.dump(data, f, indent=3)
         run_command(["pdal", "pipeline", "tmp/p_vegetation.json"])
 
@@ -200,6 +208,7 @@ if process_vegetation:
 if process_building:
 
     if with_pdal_pipeline:
+# prepare PDAL pipeline config
         print("pipeline building")
 
         data = get_base_config()
@@ -231,6 +240,7 @@ if process_building:
     }
 ])
 
+# execute PDAL pipeline
         with open("tmp/p_building.json", "w") as f: json.dump(data, f, indent=3)
         run_command(["pdal", "pipeline", "tmp/p_building.json"])
 
