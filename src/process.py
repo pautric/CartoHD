@@ -3,13 +3,14 @@ import os
 import json
 
 
-f = "heron"
-caseBE = True
+f = "strasbourg_cathedrale"
+caseBE = False
+
 input_lidar_data = "/home/juju/geodata/lidar/"+f+"/*.laz"
 output_folder = "/home/juju/lidar_mapping/"+f+"/"
 #xmin xmax ymin ymax
 #"([0,1000000],[0,1000000])"
-bounds = "([699000, 703000],[636000, 639000])"
+bounds = None #"([699000, 703000],[636000, 639000])"
 
 codeBuilding = "1" if caseBE else "6"
 
@@ -276,7 +277,7 @@ if process_building:
 if compute_dsm_rayshading:
     print("ray shading")
 
-    compute_rayshading(output_folder+"dsm.tif", output_folder+"shadow.tif")
+    compute_rayshading(output_folder+"dsm.tif", output_folder+"shadow.tif", light_altitude=15)
 
 
 #TODO
