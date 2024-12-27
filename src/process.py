@@ -16,11 +16,11 @@ codeBuilding = "1" if caseBE else "6"
 
 #https://www.youtube.com/watch?v=ZcU6N2D0ZaI
 
-process_dsm = False
+process_dsm = True
 process_dtm = True
-process_vegetation = False
-process_building = False
-compute_dsm_rayshading = False
+process_vegetation = True
+process_building = True
+compute_dsm_rayshading = True
 with_pdal_pipeline = True
 
 
