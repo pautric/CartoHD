@@ -3,7 +3,7 @@ import os
 import json
 
 
-f = "strasbourg_cathedrale"
+f = "contamines"
 caseBE = False
 
 input_lidar_data = "/home/juju/geodata/lidar/"+f+"/*.laz"

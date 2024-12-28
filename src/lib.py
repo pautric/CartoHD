@@ -268,11 +268,11 @@ def compute_rayshading(input_file: str, output_file: str, light_azimuth: float =
 
 
 #compute_rayshading("/home/juju/lidar_mapping/strasbourg_cathedrale/dsm.tif", "/home/juju/lidar_mapping/strasbourg_cathedrale/shadow_2.tif")
+'''
 for a in ["arcon", "hauterives", "marseille_centre"]:
     print(a)
     compute_rayshading("/home/juju/lidar_mapping/"+a+"/dsm.tif", "/home/juju/lidar_mapping/"+a+"/shadow.tif", light_altitude = 15)
 
-'''
 for angle in [10, 20,30,40,50,60]:
     print(angle)
     compute_rayshading("/home/juju/lidar_mapping/strasbourg_cathedrale/dsm.tif", "/home/juju/lidar_mapping/strasbourg_cathedrale/shadow_"+str(angle)+".tif", light_altitude = angle)
