@@ -4,7 +4,7 @@ import json
 
 
 f = "ensg"
-#carcassone nbrisach mt_aiguille vianden
+#carcassone nbrisach mt_aiguille
 caseBE = False
 
 input_lidar_data = "/home/juju/geodata/lidar/"+f+"/*.laz"
