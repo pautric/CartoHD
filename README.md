@@ -28,9 +28,11 @@ TODO: describe shadow depth computation with qgis
 
 ## Gallery
 
-These example were produced using [ACT-LIDAR data](https://act.public.lu/fr/cartographie/lidar1.html) for Luxembourg and [IGN-LIDAR-HD](https://geoservices.ign.fr/lidarhd) data for France.
+See some examples on [**this interactive map**](https://jgaffuri.github.io/CartoHD_webmap/viewer/dist/).
 
-Full resolution maps can be downloaded [**HERE**](https://e.pcloud.link/publink/show?code=kZyIaxZiUumqBqt8UFGCMxrJEraY4L9Qnv7).
+Full resolution maps can be downloaded [here](https://e.pcloud.link/publink/show?code=kZyIaxZiUumqBqt8UFGCMxrJEraY4L9Qnv7).
+
+These example were produced using [ACT-LIDAR data](https://act.public.lu/fr/cartographie/lidar1.html) for Luxembourg and [IGN-LIDAR-HD](https://geoservices.ign.fr/lidarhd) data for France.
 
 ![map with LIDAR data](/img/misc/kirchberg_.png)
 
