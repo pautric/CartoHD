@@ -3,8 +3,8 @@ import os
 import json
 
 
-f = "ensg"
-#carcassone nbrisach mt_aiguille
+f = "carcassonne"
+# nbrisach mt_aiguille paris_centre
 caseBE = False
 
 input_lidar_data = "/home/juju/geodata/lidar/"+f+"/*.laz"
