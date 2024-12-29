@@ -3,7 +3,7 @@ import os
 import json
 
 
-f = "paris_centre"
+f = "sollies"
 #
 caseBE = False
 
