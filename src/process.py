@@ -3,7 +3,7 @@ import os
 import json
 
 
-f = "versailles"
+f = "pavin"
 caseBE = False
 
 input_lidar_data = "/home/juju/geodata/lidar/"+f+"/*.laz"
