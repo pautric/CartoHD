@@ -3,7 +3,8 @@ import os
 import json
 
 
-f = "pavin"
+f = "toulouse_ign"
+#ensg
 caseBE = False
 
 input_lidar_data = "/home/juju/geodata/lidar/"+f+"/*.laz"
