@@ -3,7 +3,7 @@ import os
 import json
 
 
-f = "fougerolles"
+f = "aigues_mortes"
 #
 caseBE = False
 
