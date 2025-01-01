@@ -3,8 +3,8 @@ import os
 import json
 
 
-f = "calanques"
-# kirchberg
+f = "kirchberg"
+# 
 caseBE = False
 
 input_lidar_data = "/home/juju/geodata/lidar/"+f+"/*.laz"
