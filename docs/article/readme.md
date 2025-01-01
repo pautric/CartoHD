@@ -1,5 +1,5 @@
 
-This article presents some lesson learned and basic principle on LIDAR data mapping.
+This article presents some lesson learned and basic principle on LiDAR data mapping.
 Not really a tutorial for the tool.
 
 ** Input Lidar data
