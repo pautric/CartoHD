@@ -4,7 +4,7 @@ import subprocess
 import numpy as np
 import rasterio
 import geopandas as gpd
-from scipy.ndimage import binary_dilation, gaussian_filter, binary_erosion, convolve
+from scipy.ndimage import binary_dilation, gaussian_filter, binary_erosion
 import json
 import os
 
@@ -287,7 +287,7 @@ for angle in [10, 20,30,40,50,60]:
 
 
 
-def cartoHD(input_lidar_data, output_folder, bounds = None, caseBE = False):
+def cartoHDprocess(input_lidar_data, output_folder, bounds = None, caseBE = False):
 
     codeBuilding = "1" if caseBE else "6"
 

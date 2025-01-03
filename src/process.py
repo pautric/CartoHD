@@ -1,4 +1,4 @@
-from lib import run_command, cartoHD
+from cartoHD import run_command, cartoHDprocess
 import os
 
 
@@ -23,7 +23,7 @@ for f in ["dune_pilat", "cirque_gavarnie", "aix_en_provence", "banyuls", "crest"
     #xmin xmax ymin ymax
     bounds = None #"([699000, 703000],[636000, 639000])"
 
-    cartoHD(input_lidar_data, output_folder, bounds = bounds)
+    cartoHDprocess(input_lidar_data, output_folder, bounds = bounds)
 
     print("copy QGIS project file")
     run_command(["cp", "src/project_FR.qgz", output_folder])
