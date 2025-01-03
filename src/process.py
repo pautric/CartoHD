@@ -284,7 +284,8 @@ def cartoHD(input_lidar_data, output_folder, bounds = None, caseBE = False):
 
 
 idf = "/home/juju/geodata/lidar/"
-for f in ["villandry", "ile_aix", "larzac", "mont_blanc", "dune_pilat", "cirque_gavarnie", "aix_en_provence", "banyuls", "crest", "toulon", "guillestre", "lyon", "bourges", "hk"]:
+for f in ["dune_pilat", "cirque_gavarnie", "aix_en_provence", "banyuls", "crest", "toulon", "guillestre", "lyon", "bourges", "hk"]:
+    # "villandry", "ile_aix", "larzac", "mont_blanc", 
     print(f)
 
     print("download")
