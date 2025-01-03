@@ -285,6 +285,7 @@ def cartoHD(input_lidar_data, output_folder, bounds = None, caseBE = False):
 
 idf = "/home/juju/geodata/lidar/"
 for f in ["villandry", "ile_aix", "larzac", "mont_blanc", "dune_pilat", "cirque_gavarnie", "aix_en_provence", "banyuls", "crest", "toulon", "guillestre", "lyon", "bourges", "hk"]:
+    print(f)
 
     print("download")
     os.makedirs(idf+f+"/", exist_ok=True)
