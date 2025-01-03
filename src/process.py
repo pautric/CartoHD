@@ -12,6 +12,7 @@ idf = "/home/juju/geodata/lidar/"
 for f in ["toulouse", "cirque_gavarnie", "aix_en_provence", "toulon""crest",
           "guillestre", "lyon", "hk", "banyuls", "caen", "bordeaux", "grenoble",
           "la_rochelle", "lezinnes", "nice", "reims", "rouen", "bourges"]:
+    # !!! "dune_pilat"
     # "villandry", "ile_aix", "larzac", "mont_blanc", "dune_pilat"
     print(f)
 
