@@ -3,11 +3,28 @@ import os
 import json
 
 
-f = "defense"
+idf = "/home/juju/geodata/lidar/"
+f = "villandry"
+
+# download
+os.makedirs(idf+f+"/", exist_ok=True)
+run_command(["wget", "-i", idf+f+".txt", "-P", idf+f+"/"])
+
+exit()
+
+
+
+
+
+
+
+
+
+
 # 
 caseBE = False
 
-input_lidar_data = "/home/juju/geodata/lidar/"+f+"/*.laz"
+input_lidar_data = idf+f+"/*.laz"
 output_folder = "/home/juju/lidar_mapping/"+f+"/"
 #xmin xmax ymin ymax
 #"([0,1000000],[0,1000000])"
