@@ -288,6 +288,7 @@ for f in ["dune_pilat", "cirque_gavarnie", "aix_en_provence", "banyuls", "crest"
     # "villandry", "ile_aix", "larzac", "mont_blanc", 
     print(f)
 
+    #if(f != "dune_pilat"):
     print("download")
     os.makedirs(idf+f+"/", exist_ok=True)
     run_command(["wget", "-i", idf+f+".txt", "-P", idf+f+"/"])
