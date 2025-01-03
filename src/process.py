@@ -298,3 +298,6 @@ for f in ["villandry", "ile_aix", "larzac", "mont_blanc", "dune_pilat", "cirque_
 
     cartoHD(input_lidar_data, output_folder, bounds = bounds)
 
+    print("copy QGIS project file")
+    run_command(["cp", "src/project_FR.qgz", output_folder])
+
