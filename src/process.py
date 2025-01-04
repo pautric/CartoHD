@@ -9,8 +9,8 @@ import os
 
 
 idf = "/home/juju/geodata/lidar/"
-for f in ["crest", "guillestre", "lyon", "hk", "banyuls", "caen", "bordeaux", "grenoble",
-          "la_rochelle", "lezinnes", "nice", "reims", "rouen", "bourges"]:
+for f in ["grenoble", "la_rochelle", "lezinnes", "nice", "reims", "rouen", "bourges"]:
+#"crest", "guillestre", "lyon", "hk", "banyuls", "caen", "bordeaux",
     print(f)
 
 
