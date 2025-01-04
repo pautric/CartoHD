@@ -9,10 +9,8 @@ import os
 
 
 idf = "/home/juju/geodata/lidar/"
-for f in ["grenoble", "la_rochelle", "lezinnes", "nice", "reims", "rouen", "bourges"]:
-#"crest", "guillestre", "lyon", "hk", "banyuls", "caen", "bordeaux",
+for f in ["bourges", "grenoble"]:
     print(f)
-
 
     print("download")
     os.makedirs(idf+f+"/", exist_ok=True)
