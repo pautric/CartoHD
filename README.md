@@ -28,7 +28,7 @@ TODO: describe shadow depth computation with qgis
 
 ## Gallery
 
-See some examples on [**this interactive map**](https://jgaffuri.github.io/CartoHD_webmap/viewer/dist/).
+See some examples on [**this interactive map**](https://jgaffuri.github.io/CartoHD_webmap/pub/).
 
 Full resolution maps can be downloaded [here](https://e.pcloud.link/publink/show?code=kZyIaxZiUumqBqt8UFGCMxrJEraY4L9Qnv7).
 
