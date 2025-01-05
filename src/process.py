@@ -9,7 +9,7 @@ import os
 
 
 idf = "/home/juju/geodata/lidar/"
-for f in ["viaduc_millau", "roscoff"]:
+for f in ["roscoff"]:
     print(f)
 
     print("download")
