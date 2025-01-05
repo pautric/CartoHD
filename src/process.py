@@ -5,7 +5,6 @@ import os
 
 #TODO
 #processing.run("terrain_shading:Shadow depth", {'INPUT':'/tmp/processing_RHeEYq/7b63e916c7dc48d1aeb658a89ca78558/OUTPUT.tif','DIRECTION':315,'ANGLE':10,'SMOOTH':True,'OUTPUT':'TEMPORARY_OUTPUT'})
-#See https://www.youtube.com/watch?v=ZcU6N2D0ZaI
 
 
 idf = "/home/juju/geodata/lidar/"
