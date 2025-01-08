@@ -8,7 +8,7 @@ import os
 
 
 idf = "/home/juju/geodata/lidar/"
-for f in []:
+for f in ["ramonville"]:
     print(f)
 
     print("download")
