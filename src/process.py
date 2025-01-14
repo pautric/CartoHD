@@ -8,14 +8,13 @@ import os
 
 
 idf = "/home/juju/geodata/lidar/"
-for f in ["monaco", "navacelles", "belfort",
-"mulhouse", "tours", "le_mans", "auxerre", "avignon", "valence"]:
+for f in ["le_mans", "auxerre", "avignon", "valence", "mulhouse", "tours"]:
     print(f)
 
     print("download")
     os.makedirs(idf+f+"/", exist_ok=True)
-    if f != "monaco":
-        run_command(["wget", "-i", idf+f+".txt", "-P", idf+f+"/"])
+    #if f != "monaco":
+    run_command(["wget", "-i", idf+f+".txt", "-P", idf+f+"/"])
 
     input_lidar_data = idf+f+"/*.laz"
     output_folder = "/home/juju/lidar_mapping/"+f+"/"
