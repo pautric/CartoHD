@@ -33,6 +33,23 @@ pdal info input.laz
 
 
 
+IGN LiDAR HD:
+
+1 Non classé
+2 Sol
+3 Végétation basse (0-50 cm)
+4 Végétation moyenne (50 cm-1,50 m)
+5 Végétation haute (+1,50 m)
+6 Bâtiment
+9 Eau
+17 Tablier de pont
+
+64 Sursol pérenne
+66 Points virtuels
+67 Divers - bâtis
+
+
+
 
 * filter outliers
   {
