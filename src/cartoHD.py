@@ -335,7 +335,7 @@ def cartoHDprocess(input_lidar_data, output_folder, bounds = None, case = None):
         [
             # remove noise
     {
-        "limits": "Classification![7:7]" + (", Classification![60:68]" if case == "FR" else ""),
+        "limits": "Classification![7:7]" + (",Classification![60:68]" if case == "FR" else ""),
         "type": "filters.range",
         "tag": "nonoise"
     },
