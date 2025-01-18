@@ -287,9 +287,9 @@ for angle in [10, 20,30,40,50,60]:
 
 
 
-def cartoHDprocess(input_lidar_data, output_folder, bounds = None, caseBE = False):
+def cartoHDprocess(input_lidar_data, output_folder, bounds = None, case = None):
 
-    codeBuilding = "1" if caseBE else "6"
+    codeBuilding = "6" if case=="BE" else "1"
 
     process_dsm = True
     process_dtm = True
@@ -335,7 +335,7 @@ def cartoHDprocess(input_lidar_data, output_folder, bounds = None, caseBE = Fals
         [
             # remove noise
     {
-        "limits": "Classification![7:7]",
+        "limits": "Classification![7:7],[64:64],[66:66],[67:67]" if case == "FR" else "Classification![7:7]",
         "type": "filters.range",
         "tag": "nonoise"
     },
