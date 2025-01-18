@@ -25,7 +25,7 @@ import os
 
 
 idf = "/home/juju/geodata/lidar/"
-for f in [ "carcassonne" ]: #"le_mans", "auxerre", "avignon", "valence", "mulhouse", "tours"]:
+for f in [ "carlit" ]: #"le_mans", "auxerre", "avignon", "valence", "mulhouse", "tours"]:
     print(f)
 
     print("download")
