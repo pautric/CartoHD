@@ -370,6 +370,9 @@ def cartoHDprocess(input_lidar_data, output_folder, bounds = None, case = None):
         print("dsm slope")
         run_command(["gdaldem", "slope", output_folder+"dsm.tif", output_folder+"slope_dsm.tif", "-s", "1"])
 
+        if compute_dsm_rayshading:
+            print("ray shading")
+            compute_rayshading(output_folder+"dsm.tif", output_folder+"shadow.tif", light_altitude=15)
 
     if process_dtm:
 
@@ -545,13 +548,5 @@ def cartoHDprocess(input_lidar_data, output_folder, bounds = None, case = None):
         print("simplify")
         run_command(["ogr2ogr", "-f", "GPKG", "-overwrite", output_folder+"building_simplified.gpkg", output_folder+"building.gpkg", "-simplify", "0.5"])
         os.remove(output_folder+"building.gpkg")
-
-
-
-    if compute_dsm_rayshading:
-        print("ray shading")
-
-        compute_rayshading(output_folder+"dsm.tif", output_folder+"shadow.tif", light_altitude=15)
-
 
 
