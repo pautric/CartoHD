@@ -289,7 +289,7 @@ for angle in [10, 20,30,40,50,60]:
 
 def cartoHDprocess(input_lidar_data, output_folder, bounds = None, case = None):
 
-    codeBuilding = "6" if case=="BE" else "1"
+    codeBuilding = "1" if case=="BE" else "6"
 
     process_dsm = True
     process_dtm = True
