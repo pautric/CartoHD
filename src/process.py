@@ -25,7 +25,7 @@ import os
 
 
 idf = "/home/juju/geodata/lidar/"
-for f in ["perdon"]:
+for f in ["wam2025"]:
     print(f)
 
     print("download")
