@@ -1,6 +1,5 @@
 
-https://github.com/rphlo/karttapullautin
-lasground
+https://github.com/rphlo/karttapullautinlasground
 
 https://pdal.io/en/2.4.3/workshop/agenda.html
 https://paulojraposo.github.io/pages/PDAL_tutorial.html

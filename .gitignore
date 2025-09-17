@@ -1,2 +1,6 @@
 /tmp/
 /.venv/
+Downloads/
+*.qgz
+__pycache__/
+

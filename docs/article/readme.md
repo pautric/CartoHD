@@ -2,11 +2,11 @@
 This article presents some lesson learned and basic principle on LiDAR data mapping.
 Not really a tutorial for the tool.
 
-** Input Lidar data
+## Input Lidar data
 Cloud of points. Classified.
 
 
-** Extracted layers
+## Extracted layers
 
 Raster data. Resolution 20cm, finest.
 
@@ -18,11 +18,11 @@ Buildings
 
 
 
-** Styling
+## Styling
 
 Shading, etc.
 
-** Adding auxiliary data
+## Adding auxiliary data
 
 Transport network
 Building
@@ -30,17 +30,17 @@ No-vegetation land: Agricultural and cadastral parcels
 
 
 
-** Scale
+## Scale
 What suitable scale ?
 Generalisation. Level of detail management. 20cm maximum.
 Zooming out to erase noise and hide imperfections.
 
-** Mapping from vector data
+## Mapping from vector data
 Usual approach: Data capture, in raster format. Vectorisation, digitalisation, for
 
 
 
-** Limitations - perspectives
+## Limitations - perspectives
 Classification issues. Noise. Cranes. Birds. Cliffs classified as buildings. Statues classified as trees.
 Poor semantic description.
 Inconsistencies with auxiliary vector data - updating diffences.
